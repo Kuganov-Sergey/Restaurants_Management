@@ -10,6 +10,7 @@ import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
 import com.example.user_service.service.impl.UserService;
 import org.springframework.amqp.rabbit.core.RabbitMessageOperations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ public class UserController implements UserControllerI {
     private final UserService userService;
     private final RabbitMessageOperations rabbitTemplate;
 
+    @Autowired
     public UserController(UserService userService, RabbitMessageOperations rabbitTemplate) {
         this.userService = userService;
         this.rabbitTemplate = rabbitTemplate;
@@ -52,7 +54,7 @@ public class UserController implements UserControllerI {
 
     @Override
     public UserOutDTO getUser(Long id) throws UserNotFoundException {
-        rabbitTemplate.convertAndSend("myQueue" ,"Hello world");
+        rabbitTemplate.convertAndSend("myQueue", "Hello World!");
         return userService.getUser(id);
     }
 
