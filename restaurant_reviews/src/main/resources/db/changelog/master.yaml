@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\create_restaurant.sql
+  - changeSet:
+      id: 2
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\create_review.sql
+  - changeSet:
+      id: 3
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_phone_number.sql
+  - changeSet:
+      id: 4
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_creation_date_column.sql
+  - changeSet:
+      id: 5
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_email_address.sql
+  - changeSet:
+      id: 6
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_restaurant_owner_id_column.sql

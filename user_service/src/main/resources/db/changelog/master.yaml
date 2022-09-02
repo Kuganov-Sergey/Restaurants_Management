@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_user_table.sql
+  - changeSet:
+      id: 2
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_roles_table.sql
+  - changeSet:
+      id: 3
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_user_roles_table.sql
+  - changeSet:
+      id: 4
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_password_to_user.sql
