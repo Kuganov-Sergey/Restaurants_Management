@@ -1,10 +1,12 @@
 package com.example.restaurants_reviews.service.impl;
 
 import com.example.restaurants_reviews.dao.RestaurantRepository;
-import com.example.restaurants_reviews.dto.in.AddOwnerInDTO;
+import com.example.restaurants_reviews.dto.in.DeleteOwnerInRestaurantOutDTO;
+import com.example.restaurants_reviews.dto.out.AddOwnerOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
+import com.example.restaurants_reviews.exception.OwnerNotFoundException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.util.EmailUtil;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -126,7 +127,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void addOwner(AddOwnerInDTO addOwnerInDTO) {
+    public void addOwner(AddOwnerOutDTO addOwnerOutDTO) {
 
+    }
+
+    @Override
+    public void deleteOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException {
+        if (deleteOwnerInRestaurantOutDTO.getOwnerId() == null) {
+            throw new OwnerNotFoundException();
+        }
+        restaurantRepository.deleteOwnerById(deleteOwnerInRestaurantOutDTO.getOwnerId());
     }
 }

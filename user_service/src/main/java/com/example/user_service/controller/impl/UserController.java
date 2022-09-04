@@ -2,6 +2,7 @@ package com.example.user_service.controller.impl;
 
 import com.example.user_service.DTO.in.NewPasswordUserInDTO;
 import com.example.user_service.DTO.in.UserInDTO;
+import com.example.user_service.DTO.out.DeleteOwnerInRestaurantOutDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.controller.UserControllerI;
 import com.example.user_service.entity.UserEntity;
@@ -49,12 +50,14 @@ public class UserController implements UserControllerI {
 
     @Override
     public Long deleteUser(Long id) throws UserNotFoundException {
-        return userService.deleteUser(id);
+        Long userId = userService.deleteUser(id);
+        rabbitTemplate.convertAndSend("myQueue", new DeleteOwnerInRestaurantOutDTO(userId));
+        return userId;
     }
 
     @Override
     public UserOutDTO getUser(Long id) throws UserNotFoundException {
-        rabbitTemplate.convertAndSend("myQueue", "Hello World!");
+        rabbitTemplate.convertAndSend("myQueue", "Hello World!", String.class);
         return userService.getUser(id);
     }
 

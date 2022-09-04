@@ -36,6 +36,9 @@ public class Restaurant {
     @Column(name = "creation_date")
     private LocalDate date;
 
+    @Column(name = "owner_id")
+    private Long ownerId;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
