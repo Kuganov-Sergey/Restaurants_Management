@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
@@ -132,10 +134,28 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void deleteOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException {
-        if (deleteOwnerInRestaurantOutDTO.getOwnerId() == null) {
+    @Transactional
+    public void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException {
+        List<Restaurant> restaurants = restaurantRepository
+                .findRestaurantByOwnerId(deleteOwnerInRestaurantOutDTO.getOwnerId());
+        if (restaurants.isEmpty()) {
             throw new OwnerNotFoundException();
         }
-        restaurantRepository.deleteOwnerById(deleteOwnerInRestaurantOutDTO.getOwnerId());
+        for (Restaurant r : restaurants) {
+            r.setOwnerId(null);
+        }
     }
+    @Override
+    @Transactional
+    public void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO, Long newId) throws OwnerNotFoundException {
+        List<Restaurant> restaurants = restaurantRepository
+                .findRestaurantByOwnerId(deleteOwnerInRestaurantOutDTO.getOwnerId());
+        if (restaurants.isEmpty()) {
+            throw new OwnerNotFoundException();
+        }
+        for (Restaurant r : restaurants) {
+            r.setOwnerId(newId);
+        }
+    }
+
 }

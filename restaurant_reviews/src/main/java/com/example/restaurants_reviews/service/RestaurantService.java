@@ -27,6 +27,7 @@ public interface RestaurantService {
     long addRestaurantByNameAndCreationDate(String name, LocalDate creationDate) throws FoundationDateIsExpiredException;
     LocalDate getCreationDateByRestaurantName(String name) throws RestaurantNotFoundException;
     Page<Restaurant> getPaginatedAllRestaurants(int pageNum, int pageSize);
-    void deleteOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException;
+    void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException;
+    void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO, Long Id) throws OwnerNotFoundException;
     void addOwner(AddOwnerOutDTO addOwnerOutDTO);
 }

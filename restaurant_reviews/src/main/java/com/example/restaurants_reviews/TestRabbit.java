@@ -19,8 +19,8 @@ public class TestRabbit {
     }
 
     @RabbitListener(queues = "myQueue")
-    private void testRabbit(@Payload DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO)
+    public void testRabbit(@Payload DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO)
             throws OwnerNotFoundException {
-        restaurantService.deleteOwner(deleteOwnerInRestaurantOutDTO);
+        restaurantService.updateOwner(deleteOwnerInRestaurantOutDTO);
     }
 }
