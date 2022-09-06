@@ -16,4 +16,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = "SELECT avg(rating) from reviews " +
             "join restaurants as re where re.name = :name", nativeQuery = true)
     double getRatingByName(@Param("name") String name);
+
+
 }

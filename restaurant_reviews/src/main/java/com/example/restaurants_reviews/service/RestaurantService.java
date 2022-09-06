@@ -2,6 +2,7 @@ package com.example.restaurants_reviews.service;
 
 
 import com.example.restaurants_reviews.dto.in.DeleteOwnerInRestaurantOutDTO;
+import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.AddOwnerOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
@@ -27,7 +28,7 @@ public interface RestaurantService {
     long addRestaurantByNameAndCreationDate(String name, LocalDate creationDate) throws FoundationDateIsExpiredException;
     LocalDate getCreationDateByRestaurantName(String name) throws RestaurantNotFoundException;
     Page<Restaurant> getPaginatedAllRestaurants(int pageNum, int pageSize);
-    void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException;
-    void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO, Long Id) throws OwnerNotFoundException;
+    void deleteOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException;
+    void updateOwner(UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO) throws OwnerNotFoundException;
     void addOwner(AddOwnerOutDTO addOwnerOutDTO);
 }

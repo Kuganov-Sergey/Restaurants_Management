@@ -20,6 +20,8 @@ public class RoleService implements RoleServiceI {
         return roleRepository.save(roleEntity);
     }
 
+
+
     @Override
     public Long deleteRole(Long id) throws RoleNotFoundException {
         if (!roleRepository.existsById(id)) {

@@ -3,6 +3,7 @@ package com.example.user_service.controller.impl;
 import com.example.user_service.DTO.in.NewPasswordUserInDTO;
 import com.example.user_service.DTO.in.UserInDTO;
 import com.example.user_service.DTO.out.DeleteOwnerInRestaurantOutDTO;
+import com.example.user_service.DTO.out.UpdateOwnerIdRestaurantOutDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.controller.UserControllerI;
 import com.example.user_service.entity.UserEntity;
@@ -26,12 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+
 public class UserController implements UserControllerI {
 
     private final UserService userService;
     private final RabbitMessageOperations rabbitTemplate;
-
     @Autowired
     public UserController(UserService userService, RabbitMessageOperations rabbitTemplate) {
         this.userService = userService;
@@ -46,6 +46,12 @@ public class UserController implements UserControllerI {
     @Override
     public UserOutDTO updateUser(UserEntity userEntity, Long id) throws UserNotFoundException {
         return userService.updateUser(userEntity, id);
+    }
+
+    @Override
+    public Long deleteAndUpdateUser(Long id, Long newUserId) throws UserNotFoundException {
+        rabbitTemplate.convertAndSend("myQueue", new UpdateOwnerIdRestaurantOutDTO(id, newUserId));
+        return newUserId;
     }
 
     @Override
@@ -69,6 +75,16 @@ public class UserController implements UserControllerI {
     @Override
     public void newPassword(NewPasswordUserInDTO newPasswordUserInDTO) throws PasswordsDontMatchException {
         userService.newPassword(newPasswordUserInDTO);
+    }
+
+    @Override
+    public void addRoleToUser(Long userId, Long roleId) {
+        userService.addRoleToUser(userId, roleId);
+    }
+
+    @Override
+    public void deleteRoleByUserIdAndRoleId(Long userId, Long roleId) {
+        userService.deleteRoleFromUser(userId, roleId);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

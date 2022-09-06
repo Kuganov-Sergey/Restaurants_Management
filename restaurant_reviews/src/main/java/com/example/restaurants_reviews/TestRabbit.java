@@ -1,6 +1,7 @@
 package com.example.restaurants_reviews;
 
 import com.example.restaurants_reviews.dto.in.DeleteOwnerInRestaurantOutDTO;
+import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -21,6 +22,12 @@ public class TestRabbit {
     @RabbitListener(queues = "myQueue")
     public void testRabbit(@Payload DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO)
             throws OwnerNotFoundException {
-        restaurantService.updateOwner(deleteOwnerInRestaurantOutDTO);
+        restaurantService.deleteOwner(deleteOwnerInRestaurantOutDTO);
+    }
+
+    @RabbitListener(queues = "myQueue")
+    public void testRabbit(@Payload UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO)
+            throws OwnerNotFoundException {
+        restaurantService.updateOwner(updateOwnerIdRestaurantOutDTO);
     }
 }

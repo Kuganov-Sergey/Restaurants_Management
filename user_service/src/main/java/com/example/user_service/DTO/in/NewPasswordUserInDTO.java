@@ -1,19 +1,24 @@
 package com.example.user_service.DTO.in;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@Schema(description = "DTO to update password to User Entity")
 @Data
 public class NewPasswordUserInDTO {
 
+    @Schema(description = "User Email")
     @NotBlank(message = "Cannot be null")
     private String email;
 
+    @Schema(description = "Old owner password")
     private String oldPassword;
 
+    @Schema(description = "New password")
     @Size(min = 5, message = "Minimum size 5 symbols")
     @NotBlank(message = "Cannot be null")
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[%#&*@]).{5,}$",

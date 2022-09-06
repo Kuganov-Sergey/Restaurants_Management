@@ -1,10 +1,12 @@
 package com.example.user_service.service.impl;
 
 import com.example.user_service.DAO.UserRepository;
+import com.example.user_service.DAO.UserRolesRepository;
 import com.example.user_service.DTO.in.NewPasswordUserInDTO;
 import com.example.user_service.DTO.in.UserInDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.entity.UserEntity;
+import com.example.user_service.entity.UserRolesEntity;
 import com.example.user_service.exception.PasswordsDontMatchException;
 import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
@@ -22,11 +24,12 @@ import java.util.Optional;
 public class UserService implements UserServiceI {
 
     private final UserRepository userRepository;
-
+    private final UserRolesRepository userRolesRepository;
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserRolesRepository userRolesRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userRolesRepository = userRolesRepository;
         this.userMapper = userMapper;
     }
 
@@ -87,5 +90,18 @@ public class UserService implements UserServiceI {
             throw new PasswordsDontMatchException();
         }
         user.setPassword(newPasswordUserInDTO.getNewPassword());
+    }
+
+    @Override
+    public void addRoleToUser(Long userId, Long roleId) {
+        UserRolesEntity userRolesEntity = new UserRolesEntity();
+        userRolesEntity.setUserId(userId);
+        userRolesEntity.setRoleId(roleId);
+        userRolesRepository.save(userRolesEntity);
+    }
+
+    @Override
+    public void deleteRoleFromUser(Long userId, Long roleId) {
+        userRolesRepository.deleteByUserIdAndRoleId(userId, roleId);
     }
 }

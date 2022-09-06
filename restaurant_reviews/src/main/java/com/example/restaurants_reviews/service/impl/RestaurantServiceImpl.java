@@ -2,6 +2,7 @@ package com.example.restaurants_reviews.service.impl;
 
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.dto.in.DeleteOwnerInRestaurantOutDTO;
+import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.AddOwnerOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
@@ -18,18 +19,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final EntityManager entityManager;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, EntityManager entityManager) {
         this.restaurantRepository = restaurantRepository;
+        this.entityManager = entityManager;
     }
 
     private Restaurant restaurantNotFoundCheck(String name) throws RestaurantNotFoundException {
@@ -130,12 +133,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public void addOwner(AddOwnerOutDTO addOwnerOutDTO) {
-
+        //TODO реализовать!
     }
 
     @Override
     @Transactional
-    public void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException {
+    public void deleteOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException {
         List<Restaurant> restaurants = restaurantRepository
                 .findRestaurantByOwnerId(deleteOwnerInRestaurantOutDTO.getOwnerId());
         if (restaurants.isEmpty()) {
@@ -145,17 +148,17 @@ public class RestaurantServiceImpl implements RestaurantService {
             r.setOwnerId(null);
         }
     }
+
     @Override
     @Transactional
-    public void updateOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO, Long newId) throws OwnerNotFoundException {
+    public void updateOwner(UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO) throws OwnerNotFoundException {
         List<Restaurant> restaurants = restaurantRepository
-                .findRestaurantByOwnerId(deleteOwnerInRestaurantOutDTO.getOwnerId());
+                .findRestaurantByOwnerId(updateOwnerIdRestaurantOutDTO.getOldId());
         if (restaurants.isEmpty()) {
             throw new OwnerNotFoundException();
         }
         for (Restaurant r : restaurants) {
-            r.setOwnerId(newId);
+            r.setOwnerId(updateOwnerIdRestaurantOutDTO.getNewId());
         }
     }
-
 }

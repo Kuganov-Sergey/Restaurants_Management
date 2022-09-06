@@ -17,4 +17,6 @@ public interface UserServiceI {
     UserOutDTO getUser(Long id) throws UserNotFoundException;
     Page<UserEntity> getAll(Pageable pageable);
     void newPassword(NewPasswordUserInDTO newPasswordUserInDTO) throws PasswordsDontMatchException;
+    void addRoleToUser(Long userId, Long roleId);
+    void deleteRoleFromUser(Long userId, Long roleId);
 }
