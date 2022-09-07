@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-public class ReviewControllerTest extends AppContextTest {
+public class ReviewControllerImplTest extends AppContextTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -30,21 +30,6 @@ public class ReviewControllerTest extends AppContextTest {
     protected RestaurantService restaurantService;
 
     @Test
-    void getReviewsByRestaurantName() throws Exception {
-        this.mockMvc.perform(get("/review/{name}", "mac"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void getRatingByRestaurantName() throws Exception {
-        double expected = reviewService.getRatingByRestaurantName("mac");
-        this.mockMvc.perform(get("/review/rating/{name}", "mac"))
-                .andDo(print())
-                .andExpect(content().string(Double.toString(expected)));
-    }
-
-    @Test
     void addReview() throws Exception {
         ReviewInDTO review = ReviewInDTO.builder()
                 .review("cool burgers")
@@ -53,7 +38,7 @@ public class ReviewControllerTest extends AppContextTest {
                 .build();
         ObjectMapper objectMapper = new JsonMapper();
         String obj = objectMapper.writeValueAsString(review);
-        this.mockMvc.perform(post("/review/new")
+        this.mockMvc.perform(post("/review")
                         .contentType(MediaType.APPLICATION_JSON).content(obj))
                 .andExpect(status().isOk());
     }

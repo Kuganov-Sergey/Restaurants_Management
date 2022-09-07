@@ -5,6 +5,7 @@ import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
+import com.example.restaurants_reviews.service.ReviewService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-public class RestaurantControllerTest extends AppContextTest {
+public class RestaurantControllerImplTest extends AppContextTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,10 +39,13 @@ public class RestaurantControllerTest extends AppContextTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ReviewService reviewService;
+
     @Test
     void getAll() throws Exception {
         objectMapper.registerModule(new JavaTimeModule());
-        this.mockMvc.perform(get("/restaurant/all"))
+        this.mockMvc.perform(get("/restaurant"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -50,7 +54,7 @@ public class RestaurantControllerTest extends AppContextTest {
     @Test
     void descriptionByName() throws Exception {
         String expected = restaurantService.getDescriptionByName("mac");
-        this.mockMvc.perform(get("/restaurant/description/{name}", "mac"))
+        this.mockMvc.perform(get("/restaurant/{name}/description", "mac"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(expected));
@@ -82,15 +86,8 @@ public class RestaurantControllerTest extends AppContextTest {
                 .build();
         objectMapper.registerModule(new JavaTimeModule());
         String obj = objectMapper.writeValueAsString(restaurant);
-        this.mockMvc.perform(post("/restaurant/new")
+        this.mockMvc.perform(post("/restaurant")
                         .contentType(MediaType.APPLICATION_JSON).content(obj))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void updateDescription() throws Exception {
-        this.mockMvc.perform(put("/restaurant/update/{name}/{description}", "mac", "description"))
-                .andDo(print())
                 .andExpect(status().isOk());
     }
 
@@ -121,7 +118,7 @@ public class RestaurantControllerTest extends AppContextTest {
                 .date(LocalDate.of(2050, 10, 10))
                 .build();
         String expected = objectMapper.writeValueAsString(restaurant);
-        this.mockMvc.perform(post("/restaurant/new")
+        this.mockMvc.perform(post("/restaurant")
                         .contentType(MediaType.APPLICATION_JSON).content(expected))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
@@ -133,6 +130,21 @@ public class RestaurantControllerTest extends AppContextTest {
                                     "name": "Empty name",
                                     "description": "Empty description"
                         }"""));
+    }
+
+    @Test
+    void getReviewsByRestaurantName() throws Exception {
+        this.mockMvc.perform(get("/restaurant/{name}/reviews", "mac"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getRatingByRestaurantName() throws Exception {
+        double expected = reviewService.getRatingByRestaurantName("mac");
+        this.mockMvc.perform(get("/restaurant/{name}/rating", "mac"))
+                .andDo(print())
+                .andExpect(content().string(Double.toString(expected)));
     }
 
     @Test

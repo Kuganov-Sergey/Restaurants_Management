@@ -13,6 +13,7 @@ public interface RestaurantMapper {
 
     RestaurantOutDTO restaurantToRestaurantOutDTO(Restaurant restaurant);
 
+    @Mapping(target = "ownerId", ignore = true)
     @Mapping(target = "id", ignore = true)
     Restaurant restaurantInDTOToRestaurantEntity(RestaurantInDTO restaurantInDTO);
 

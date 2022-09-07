@@ -2,85 +2,50 @@ package com.example.restaurants_reviews.controller;
 
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
-import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
-import com.example.restaurants_reviews.mapper.RestaurantMapper;
-import com.example.restaurants_reviews.service.RestaurantService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-@RestController
 @RequestMapping("/restaurant")
-public class RestaurantController {
+public interface RestaurantController {
 
-    private final RestaurantService restaurantService;
-    private final RestaurantMapper restaurantMapper;
+    @Operation(summary = "Get all restaurants")
+    @GetMapping
+    Page<RestaurantOutDTO> getAllRestaurants(Pageable pageable);
 
-    public RestaurantController(RestaurantService restaurantService, RestaurantMapper restaurantMapper) {
-        this.restaurantService = restaurantService;
-        this.restaurantMapper = restaurantMapper;
-    }
+    @Operation(summary = "Get description by restaurant name")
+    @GetMapping("/{name}/description")
+    String getDescriptionByName(@PathVariable String name);
 
-    @GetMapping("/all")
-    public Page<RestaurantOutDTO> getAllRestaurants(Pageable pageable) {
-        Page<Restaurant> allRestaurants = restaurantService.getAllRestaurants(pageable);
-        return allRestaurants.map(restaurantMapper::restaurantToRestaurantOutDTO);
-    }
+    @Operation(summary = "Create new restaurant")
+    @PostMapping
+    RestaurantInDTO addRestaurant(@RequestBody @Valid RestaurantInDTO restaurantInDTO);
 
-    @GetMapping("/description/{name}")
-    public String getDescriptionByName(@PathVariable String name) {
-        Restaurant restaurant = restaurantService.findRestaurantByName(name);
-        return restaurant.getDescription();
-    }
+    //TODO подумать
+    @PutMapping("/{name}/{description}")
+    void updateDescriptionByName(@PathVariable String name, @PathVariable String description)
+            throws RestaurantNotFoundException;
 
-    @PostMapping("/new")
-    public RestaurantInDTO addRestaurant(@RequestBody @Valid RestaurantInDTO restaurantInDTO) {
-        restaurantService.addRestaurant(restaurantMapper.restaurantInDTOToRestaurantEntity(restaurantInDTO));
-        return restaurantInDTO;
-    }
-
-    @PutMapping("/update/{name}/{description}")
-    public void updateDescriptionByName(@PathVariable String name, @PathVariable String description) throws RestaurantNotFoundException {
-        restaurantService.updateDescriptionByName(name, description);
-    }
-
+    @Operation(summary = "Find restaurant by name")
     @GetMapping("/{name}")
-    public RestaurantOutDTO findRestaurantByName(@PathVariable String name) {
-        Restaurant restaurant = restaurantService.findRestaurantByName(name);
-        return restaurantMapper.restaurantToRestaurantOutDTO(restaurant);
-    }
+    RestaurantOutDTO findRestaurantByName(@PathVariable String name);
 
-    @PutMapping("/newByNameAndDate/{name}/{date}")
-    public void addRestaurantByNameAndCreationDate(@PathVariable String name, @PathVariable LocalDate date)
-            throws FoundationDateIsExpiredException {
-        restaurantService.addRestaurantByNameAndCreationDate(name, date);
-    }
+    @Operation(summary = "Get all reviews by restaurant name")
+    @GetMapping("/{name}/reviews")
+    Page<String> getReviewsByName(@PathVariable String name, Pageable pageable);
 
-    @GetMapping("/pagingAll/{pageNumber}/{pageSize}")
-    public Page<Restaurant> getPagingAllRestaurants(@PathVariable int pageNumber, @PathVariable int pageSize) {
-        return restaurantService.getPaginatedAllRestaurants(pageNumber, pageSize);
-    }
+    @Operation(summary = "Get avg rating of restaurant by name")
+    @GetMapping("/{name}/rating")
+    double getRatingByName(@PathVariable String name);
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleArgumentFormatException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
+    @Operation(summary = "Create new restaurant by name and creation date")
+    @PutMapping("/{name}/{date}")
+    void addRestaurantByNameAndCreationDate(@PathVariable String name, @PathVariable LocalDate date)
+            throws FoundationDateIsExpiredException;
 }
