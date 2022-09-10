@@ -19,11 +19,11 @@ public class TestRabbit {
         this.restaurantService = restaurantService;
     }
 
-    @RabbitListener(queues = "myQueue")
-    public void testRabbit(@Payload DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO)
-            throws OwnerNotFoundException {
-        restaurantService.deleteOwner(deleteOwnerInRestaurantOutDTO);
-    }
+//    @RabbitListener(queues = "myQueue")
+//    public void testRabbit(@Payload DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO)
+//            throws OwnerNotFoundException {
+//        restaurantService.deleteOwner(deleteOwnerInRestaurantOutDTO);
+//    }
 
     @RabbitListener(queues = "myQueue")
     public void testRabbit(@Payload UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO)

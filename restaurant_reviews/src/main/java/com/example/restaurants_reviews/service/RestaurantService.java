@@ -1,9 +1,11 @@
 package com.example.restaurants_reviews.service;
 
 
+import com.example.restaurants_reviews.controller.data.RestaurantSmall;
 import com.example.restaurants_reviews.dto.in.DeleteOwnerInRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.AddOwnerOutDTO;
+import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface RestaurantService {
 
@@ -31,4 +34,5 @@ public interface RestaurantService {
     void deleteOwner(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) throws OwnerNotFoundException;
     void updateOwner(UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO) throws OwnerNotFoundException;
     void addOwner(AddOwnerOutDTO addOwnerOutDTO);
+    Page<RestaurantSmallOutDTO> getSmallList(Pageable pageable);
 }

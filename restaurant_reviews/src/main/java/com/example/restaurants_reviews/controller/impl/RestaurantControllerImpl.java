@@ -3,6 +3,7 @@ package com.example.restaurants_reviews.controller.impl;
 import com.example.restaurants_reviews.controller.RestaurantController;
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
+import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
@@ -76,6 +77,11 @@ public class RestaurantControllerImpl implements RestaurantController {
     @Override
     public double getRatingByName(String name) {
         return reviewService.getRatingByRestaurantName(name);
+    }
+
+    @Override
+    public Page<RestaurantSmallOutDTO> getSmallListRestaurants(Pageable pageable) {
+        return restaurantService.getSmallList(pageable);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

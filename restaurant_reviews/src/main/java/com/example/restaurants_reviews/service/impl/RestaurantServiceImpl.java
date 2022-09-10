@@ -1,14 +1,17 @@
 package com.example.restaurants_reviews.service.impl;
 
+import com.example.restaurants_reviews.controller.data.RestaurantSmall;
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.dto.in.DeleteOwnerInRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.AddOwnerOutDTO;
+import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
 import com.example.restaurants_reviews.entity.Restaurant;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.IncorrectEmailAddressException;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
+import com.example.restaurants_reviews.mapper.RestaurantMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.util.EmailUtil;
 import com.example.restaurants_reviews.util.PhoneUtil;
@@ -19,7 +22,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,11 +30,12 @@ import java.util.Optional;
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-    private final EntityManager entityManager;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, EntityManager entityManager) {
+    private final RestaurantMapper restaurantMapper;
+
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper) {
         this.restaurantRepository = restaurantRepository;
-        this.entityManager = entityManager;
+        this.restaurantMapper = restaurantMapper;
     }
 
     private Restaurant restaurantNotFoundCheck(String name) throws RestaurantNotFoundException {
@@ -152,13 +155,22 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     @Transactional
     public void updateOwner(UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO) throws OwnerNotFoundException {
-        List<Restaurant> restaurants = restaurantRepository
-                .findRestaurantByOwnerId(updateOwnerIdRestaurantOutDTO.getOldId());
-        if (restaurants.isEmpty()) {
-            throw new OwnerNotFoundException();
-        }
-        for (Restaurant r : restaurants) {
-            r.setOwnerId(updateOwnerIdRestaurantOutDTO.getNewId());
-        }
+//        List<Restaurant> restaurants = restaurantRepository
+//                .findRestaurantByOwnerId(updateOwnerIdRestaurantOutDTO.getOldId());
+//        if (restaurants.isEmpty()) {
+//            throw new OwnerNotFoundException();
+//        }
+//        for (Restaurant r : restaurants) {
+//            r.setOwnerId(updateOwnerIdRestaurantOutDTO.getNewId());
+//        }
+        restaurantRepository.updateUserSetStatusForName(updateOwnerIdRestaurantOutDTO.getNewId(),
+                updateOwnerIdRestaurantOutDTO.getOldId());
+    }
+
+    @Override
+    @Transactional
+    public Page<RestaurantSmallOutDTO> getSmallList(Pageable pageable) {
+        Page<RestaurantSmall> smallRestaurants = restaurantRepository.findSmallRestaurants(pageable);
+        return smallRestaurants.map(restaurantMapper::restaurantSmallToRestaurantSmallOutDTO);
     }
 }

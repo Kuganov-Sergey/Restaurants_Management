@@ -34,7 +34,7 @@ public interface UserControllerI {
     Long deleteUser(@PathVariable Long id) throws UserNotFoundException;
 
     //TODO не правильно, нужно додумать
-    @DeleteMapping("/{id}/{newUserId}")
+    @DeleteMapping("/{id}/replace/{newUserId}")
     Long deleteAndUpdateUser(@PathVariable Long id, @PathVariable Long newUserId) throws UserNotFoundException;
 
     @Operation(summary = "Get user by id")
@@ -55,7 +55,7 @@ public interface UserControllerI {
     Page<UserEntity> getAll(Pageable pageable);
 
     @Operation(summary = "Create new password for user")
-    @PutMapping("/new_password")
+    @PutMapping("/password")
     void newPassword(@RequestBody @Valid NewPasswordUserInDTO newPasswordUserInDTO) throws PasswordsDontMatchException;
 
     @Operation(summary = "Add role to user")

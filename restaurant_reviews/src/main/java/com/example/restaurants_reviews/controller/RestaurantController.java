@@ -2,6 +2,7 @@ package com.example.restaurants_reviews.controller;
 
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
+import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
 import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,8 +29,8 @@ public interface RestaurantController {
     RestaurantInDTO addRestaurant(@RequestBody @Valid RestaurantInDTO restaurantInDTO);
 
     //TODO подумать
-    @PutMapping("/{name}/{description}")
-    void updateDescriptionByName(@PathVariable String name, @PathVariable String description)
+    @PutMapping
+    void updateDescriptionByName(@RequestParam String name, @RequestParam String description)
             throws RestaurantNotFoundException;
 
     @Operation(summary = "Find restaurant by name")
@@ -44,8 +45,12 @@ public interface RestaurantController {
     @GetMapping("/{name}/rating")
     double getRatingByName(@PathVariable String name);
 
+    //TODO --- post!!
     @Operation(summary = "Create new restaurant by name and creation date")
     @PutMapping("/{name}/{date}")
     void addRestaurantByNameAndCreationDate(@PathVariable String name, @PathVariable LocalDate date)
             throws FoundationDateIsExpiredException;
+
+    @GetMapping("/smallList")
+    Page<RestaurantSmallOutDTO> getSmallListRestaurants(Pageable pageable);
 }
