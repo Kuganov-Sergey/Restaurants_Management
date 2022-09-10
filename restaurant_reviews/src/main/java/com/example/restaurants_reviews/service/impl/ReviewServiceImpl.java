@@ -2,11 +2,12 @@ package com.example.restaurants_reviews.service.impl;
 
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.dao.ReviewRepository;
-import com.example.restaurants_reviews.entity.Restaurant;
-import com.example.restaurants_reviews.entity.Review;
+import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
+import com.example.restaurants_reviews.entity.RestaurantEntity;
+import com.example.restaurants_reviews.entity.ReviewEntity;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
+import com.example.restaurants_reviews.mapper.ReviewMapper;
 import com.example.restaurants_reviews.service.ReviewService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,40 +21,29 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final RestaurantRepository restaurantRepository;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository, RestaurantRepository restaurantRepository) {
+    private final ReviewMapper reviewMapper;
+
+    public ReviewServiceImpl(ReviewRepository reviewRepository, RestaurantRepository restaurantRepository, ReviewMapper reviewMapper) {
         this.reviewRepository = reviewRepository;
         this.restaurantRepository = restaurantRepository;
+        this.reviewMapper = reviewMapper;
     }
 
     @Override
     @Transactional
-    public List<String> getReviewsByRestaurantName(String name) {
-
-        return reviewRepository.getReviewsByName(name);
-    }
-
-    @Override
-    public double getRatingByRestaurantName(String name) {
-        return reviewRepository.getRatingByName(name);
+    public List<ReviewsByRestaurantIdOutDTO> getReviewsByRestaurantId(Long id) {
+        List<ReviewEntity> reviewsById = reviewRepository.getReviewsById(id);
+        return reviewsById.stream().map(reviewMapper::reviewToReviewsByRestaurantIdOutDTO).toList();
     }
 
     @Override
     public void addReview(Long restaurantId, String text, Integer rate) throws RestaurantNotFoundException {
-        Optional<Restaurant> byId = restaurantRepository.findById(restaurantId);
+        Optional<RestaurantEntity> byId = restaurantRepository.findById(restaurantId);
         if (byId.isEmpty()) {
             throw new RestaurantNotFoundException();
         }
-        Restaurant restaurant = byId.get();
-        Review review = new Review(restaurant, text, rate);
-        reviewRepository.save(review);
-    }
-
-    @Override
-    public void updateReviewByRestaurantId(long id, String review) {
-        Optional<Review> reviewNewObject = reviewRepository.findById(id);
-        if (reviewNewObject.isPresent()) {
-            reviewNewObject.get().setReview(review);
-            reviewRepository.save(reviewNewObject.get());
-        }
+        RestaurantEntity restaurantEntity = byId.get();
+        ReviewEntity reviewEntity = new ReviewEntity(restaurantEntity, text, rate);
+        reviewRepository.save(reviewEntity);
     }
 }

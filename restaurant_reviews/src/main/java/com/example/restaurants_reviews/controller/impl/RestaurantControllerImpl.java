@@ -4,8 +4,9 @@ import com.example.restaurants_reviews.controller.RestaurantController;
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
-import com.example.restaurants_reviews.entity.Restaurant;
-import com.example.restaurants_reviews.exception.FoundationDateIsExpiredException;
+import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
+import com.example.restaurants_reviews.dto.out.UpdateRestaurantOutDTO;
+import com.example.restaurants_reviews.entity.RestaurantEntity;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.mapper.RestaurantMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
@@ -17,10 +18,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +43,8 @@ public class RestaurantControllerImpl implements RestaurantController {
     }
 
     public Page<RestaurantOutDTO> getAllRestaurants(Pageable pageable) {
-        Page<Restaurant> allRestaurants = restaurantService.getAllRestaurants(pageable);
+        Page<RestaurantEntity> allRestaurants = restaurantService.getAllRestaurants(pageable);
         return allRestaurants.map(restaurantMapper::restaurantToRestaurantOutDTO);
-    }
-
-    public String getDescriptionByName(@PathVariable String name) {
-        Restaurant restaurant = restaurantService.findRestaurantByName(name);
-        return restaurant.getDescription();
     }
 
     public RestaurantInDTO addRestaurant(@RequestBody @Valid RestaurantInDTO restaurantInDTO) {
@@ -54,34 +52,25 @@ public class RestaurantControllerImpl implements RestaurantController {
         return restaurantInDTO;
     }
 
-    public void updateDescriptionByName(@PathVariable String name, @PathVariable String description) throws RestaurantNotFoundException {
-        restaurantService.updateDescriptionByName(name, description);
-    }
-
-    public RestaurantOutDTO findRestaurantByName(@PathVariable String name) {
-        Restaurant restaurant = restaurantService.findRestaurantByName(name);
-        return restaurantMapper.restaurantToRestaurantOutDTO(restaurant);
-    }
-
-    public void addRestaurantByNameAndCreationDate(@PathVariable String name, @PathVariable LocalDate date)
-            throws FoundationDateIsExpiredException {
-        restaurantService.addRestaurantByNameAndCreationDate(name, date);
-    }
-
     @Override
-    public Page<String> getReviewsByName(String name, Pageable pageable) {
-        List<String> reviews = reviewService.getReviewsByRestaurantName(name);
+    public Page<ReviewsByRestaurantIdOutDTO> getReviewsById(Long id, Pageable pageable) {
+        List<ReviewsByRestaurantIdOutDTO> reviews = reviewService.getReviewsByRestaurantId(id);
         return new PageImpl<>(reviews, pageable, reviews.size());
-    }
-
-    @Override
-    public double getRatingByName(String name) {
-        return reviewService.getRatingByRestaurantName(name);
     }
 
     @Override
     public Page<RestaurantSmallOutDTO> getSmallListRestaurants(Pageable pageable) {
         return restaurantService.getSmallList(pageable);
+    }
+
+    @Override
+    public RestaurantOutDTO getRestaurantById(Long id) throws RestaurantNotFoundException {
+        return restaurantService.getRestaurantById(id);
+    }
+
+    @Override
+    public void updateRestaurantById(Long id, UpdateRestaurantOutDTO restaurant) throws RestaurantNotFoundException {
+        restaurantService.updateRestaurantById(id, restaurant);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

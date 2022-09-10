@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "restaurants")
-public class Restaurant {
+public class RestaurantEntity {
 
     @Id
     @Column(name = "id")
@@ -43,7 +43,7 @@ public class Restaurant {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Restaurant that = (Restaurant) o;
+        RestaurantEntity that = (RestaurantEntity) o;
         return Objects.equals(id, that.id);
     }
 

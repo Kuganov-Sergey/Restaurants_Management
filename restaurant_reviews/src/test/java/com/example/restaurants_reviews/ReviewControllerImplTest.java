@@ -29,18 +29,18 @@ public class ReviewControllerImplTest extends AppContextTest {
     @Autowired
     protected RestaurantService restaurantService;
 
-    @Test
-    void addReview() throws Exception {
-        ReviewInDTO review = ReviewInDTO.builder()
-                .review("cool burgers")
-                .restaurant_id(restaurantService.findRestaurantByName("mac").getId())
-                .rating(5)
-                .build();
-        ObjectMapper objectMapper = new JsonMapper();
-        String obj = objectMapper.writeValueAsString(review);
-        this.mockMvc.perform(post("/review")
-                        .contentType(MediaType.APPLICATION_JSON).content(obj))
-                .andExpect(status().isOk());
-    }
+//    @Test
+//    void addReview() throws Exception {
+//        ReviewInDTO review = ReviewInDTO.builder()
+//                .review("cool burgers")
+//                .restaurant_id(restaurantService.findRestaurantByName("mac").getId())
+//                .rating(5)
+//                .build();
+//        ObjectMapper objectMapper = new JsonMapper();
+//        String obj = objectMapper.writeValueAsString(review);
+//        this.mockMvc.perform(post("/review")
+//                        .contentType(MediaType.APPLICATION_JSON).content(obj))
+//                .andExpect(status().isOk());
+//    }
 
 }

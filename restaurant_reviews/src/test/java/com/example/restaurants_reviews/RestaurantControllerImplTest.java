@@ -52,31 +52,7 @@ public class RestaurantControllerImplTest extends AppContextTest {
     }
 
     @Test
-    void descriptionByName() throws Exception {
-        String expected = restaurantService.getDescriptionByName("mac");
-        this.mockMvc.perform(get("/restaurant/{name}/description", "mac"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(expected));
-    }
-
-    @Test
-    void addRestaurantByNameAndCreationDate() throws FoundationDateIsExpiredException, RestaurantNotFoundException {
-        MockedStatic<LocalDate> localDateMockedStatic = mockStatic(LocalDate.class, CALLS_REAL_METHODS);
-        LocalDate defaultDateNow = LocalDate.of(2012, 2, 2);
-        localDateMockedStatic.when(LocalDate::now).thenReturn(defaultDateNow);
-        assertThrows(FoundationDateIsExpiredException.class,
-                () -> restaurantService
-                        .addRestaurantByNameAndCreationDate("mac",
-                                LocalDate.of(2015, 2, 2)));
-
-        LocalDate localDateExpected = LocalDate.of(2012, 2, 2);
-        restaurantService.addRestaurantByNameAndCreationDate("kfc", localDateExpected);
-        assertEquals(localDateExpected, restaurantService.getCreationDateByRestaurantName("kfc"));
-    }
-
-    @Test
-    void addRestaurants() throws Exception {
+    void addRestaurant() throws Exception {
         RestaurantInDTO restaurant = RestaurantInDTO.builder()
                 .description("burgers")
                 .phoneNumber("+79996665522")
@@ -89,23 +65,6 @@ public class RestaurantControllerImplTest extends AppContextTest {
         this.mockMvc.perform(post("/restaurant")
                         .contentType(MediaType.APPLICATION_JSON).content(obj))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void findRestaurantByName() throws Exception {
-        RestaurantOutDTO restaurant = RestaurantOutDTO.builder()
-                .id(restaurantService.getAllRestaurants(Pageable.unpaged()).toList().get(0).getId())
-                .description("burgers")
-                .phoneNumber("+79997771122")
-                .emailAddress(null)
-                .name("mac")
-                .build();
-        String expected = objectMapper.writeValueAsString(restaurant);
-        this.mockMvc.perform(get("/restaurant/{name}", "mac"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(expected));
     }
 
     @Test
@@ -130,25 +89,5 @@ public class RestaurantControllerImplTest extends AppContextTest {
                                     "name": "Empty name",
                                     "description": "Empty description"
                         }"""));
-    }
-
-    @Test
-    void getReviewsByRestaurantName() throws Exception {
-        this.mockMvc.perform(get("/restaurant/{name}/reviews", "mac"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void getRatingByRestaurantName() throws Exception {
-        double expected = reviewService.getRatingByRestaurantName("mac");
-        this.mockMvc.perform(get("/restaurant/{name}/rating", "mac"))
-                .andDo(print())
-                .andExpect(content().string(Double.toString(expected)));
-    }
-
-    @Test
-    public void testSortingGetAllRestaurantsPaging() {
-
     }
 }

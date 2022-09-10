@@ -1,6 +1,5 @@
 package com.example.restaurants_reviews.dto.out;
 
-import com.example.restaurants_reviews.entity.RestaurantEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -9,13 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewOutDTO {
+public class ReviewsByRestaurantIdOutDTO {
 
     @Schema(description = "review id")
     private Long id;
-
-    @Schema(description = "restaurant id")
-    private RestaurantEntity restaurant_Entity_id;
 
     @Schema(description = "review text")
     private String review;

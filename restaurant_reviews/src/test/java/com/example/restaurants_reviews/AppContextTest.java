@@ -1,13 +1,16 @@
 package com.example.restaurants_reviews;
 
 import com.example.restaurants_reviews.dao.RestaurantRepository;
-import com.example.restaurants_reviews.entity.Restaurant;
-import com.example.restaurants_reviews.entity.Review;
+import com.example.restaurants_reviews.entity.RestaurantEntity;
+import com.example.restaurants_reviews.entity.ReviewEntity;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.service.ReviewService;
 import com.google.i18n.phonenumbers.NumberParseException;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
@@ -30,21 +33,21 @@ public class AppContextTest {
 
     @BeforeAll
     void addRestaurantsAndReviewsInDB() throws RestaurantNotFoundException {
-        Restaurant restaurant = new Restaurant();
+        RestaurantEntity restaurant = new RestaurantEntity();
         restaurant.setName("mac");
         restaurant.setDescription("burgers");
         restaurantService.addRestaurant(restaurant);
-        Review review = new Review();
+        ReviewEntity review = new ReviewEntity();
         review.setReview("best place");
         review.setRestaurant_id(restaurantService.getAllRestaurants(Pageable.unpaged()).toList().get(0));
         review.setRating(5);
         reviewService.addReview(review.getRestaurant_id().getId(), review.getReview(), review.getRating());
     }
 
-    @BeforeEach
-    void setDefaultParameters() throws NumberParseException, RestaurantNotFoundException {
-        restaurantService.addPhoneByRestaurantName("mac", "+79997771122");
-    }
+//    @BeforeEach
+//    void setDefaultParameters() throws NumberParseException, RestaurantNotFoundException {
+//        restaurantService.addPhoneByRestaurantName("mac", "+79997771122");
+//    }
 
     @AfterAll
     void cleanTable() {

@@ -1,6 +1,5 @@
-package com.example.restaurants_reviews;
+package com.example.restaurants_reviews.docker;
 
-import com.example.restaurants_reviews.dto.in.DeleteOwnerInRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
@@ -11,22 +10,16 @@ import org.springframework.stereotype.Component;
 
 @EnableRabbit
 @Component
-public class TestRabbit {
+public class UpdateOwnerRabbit {
 
     private final RestaurantService restaurantService;
 
-    public TestRabbit(RestaurantService restaurantService) {
+    public UpdateOwnerRabbit(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
 
-//    @RabbitListener(queues = "myQueue")
-//    public void testRabbit(@Payload DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO)
-//            throws OwnerNotFoundException {
-//        restaurantService.deleteOwner(deleteOwnerInRestaurantOutDTO);
-//    }
-
     @RabbitListener(queues = "myQueue")
-    public void testRabbit(@Payload UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO)
+    public void updateOwnerFromUserService(@Payload UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO)
             throws OwnerNotFoundException {
         restaurantService.updateOwner(updateOwnerIdRestaurantOutDTO);
     }
