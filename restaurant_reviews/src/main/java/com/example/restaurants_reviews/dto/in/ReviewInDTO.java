@@ -1,5 +1,6 @@
 package com.example.restaurants_reviews.dto.in;
 
+import com.example.restaurants_reviews.constraint.ValidRestaurantExists;
 import lombok.*;
 
 import javax.validation.constraints.Max;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class ReviewInDTO {
 
+    @ValidRestaurantExists(message = "Restaurant is not exist")
     private Long restaurant_id;
 
     @NotBlank(message = "Empty review!")
