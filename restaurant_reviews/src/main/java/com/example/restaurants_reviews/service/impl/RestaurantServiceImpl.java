@@ -3,11 +3,11 @@ package com.example.restaurants_reviews.service.impl;
 import com.example.restaurants_reviews.controller.data.RestaurantSmall;
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.dao.ReviewRepository;
-import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
+import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
 import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
-import com.example.restaurants_reviews.dto.out.UpdateRestaurantOutDTO;
+import com.example.restaurants_reviews.dto.in.UpdateRestaurantInDTO;
 import com.example.restaurants_reviews.entity.RestaurantEntity;
 import com.example.restaurants_reviews.entity.ReviewEntity;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
@@ -72,14 +72,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public void updateOwner(UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO) throws OwnerNotFoundException {
+    public void updateOwner(UpdateOwnerIdRestaurantInDTO updateOwnerIdRestaurantInDTO) throws OwnerNotFoundException {
         Optional<RestaurantEntity> restaurant = restaurantRepository
-                .findById(updateOwnerIdRestaurantOutDTO.getOldId());
+                .findById(updateOwnerIdRestaurantInDTO.getOldId());
         if (restaurant.isEmpty()) {
             throw new OwnerNotFoundException();
         }
-        restaurantRepository.updateUserSetStatusForName(updateOwnerIdRestaurantOutDTO.getNewId(),
-                updateOwnerIdRestaurantOutDTO.getOldId());
+        restaurantRepository.updateUserSetStatusForName(updateOwnerIdRestaurantInDTO.getNewId(),
+                updateOwnerIdRestaurantInDTO.getOldId());
     }
 
     @Override
@@ -100,7 +100,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public void updateRestaurantById(Long id, UpdateRestaurantOutDTO restaurant) throws RestaurantNotFoundException {
+    public void updateRestaurantById(Long id, UpdateRestaurantInDTO restaurant) throws RestaurantNotFoundException {
         Optional<RestaurantEntity> restaurantOptional = restaurantRepository.findById(id);
         if (restaurantOptional.isEmpty()) {
             throw new RestaurantNotFoundException();
@@ -109,6 +109,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantOptional.get().setEmailAddress(restaurant.getEmailAddress());
         restaurantOptional.get().setPhoneNumber(restaurant.getPhoneNumber());
         restaurantOptional.get().setName(restaurant.getName());
+        restaurantOptional.get().setOwnerId(restaurant.getOwnerId());
     }
 
     @Override

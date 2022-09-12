@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Data
-public class UpdateOwnerIdRestaurantOutDTO {
+public class UpdateOwnerIdRestaurantInDTO {
 
     private Long oldId;
     private Long newId;

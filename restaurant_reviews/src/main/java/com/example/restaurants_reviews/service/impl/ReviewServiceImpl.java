@@ -2,10 +2,8 @@ package com.example.restaurants_reviews.service.impl;
 
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.dao.ReviewRepository;
-import com.example.restaurants_reviews.dto.in.ReviewInDTO;
 import com.example.restaurants_reviews.dto.out.ReviewOutDTO;
-import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
-import com.example.restaurants_reviews.dto.out.UpdateReviewOutDTO;
+import com.example.restaurants_reviews.dto.in.UpdateReviewInDTO;
 import com.example.restaurants_reviews.entity.RestaurantEntity;
 import com.example.restaurants_reviews.entity.ReviewEntity;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
@@ -15,7 +13,6 @@ import com.example.restaurants_reviews.service.ReviewService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,13 +43,13 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public ReviewOutDTO updateReview(UpdateReviewOutDTO updateReviewOutDTO, Long id) throws ReviewNotFoundException {
+    public ReviewOutDTO updateReview(UpdateReviewInDTO updateReviewInDTO, Long id) throws ReviewNotFoundException {
         Optional<ReviewEntity> reviewEntityOptional = reviewRepository.findById(id);
         if (reviewEntityOptional.isEmpty()) {
             throw new ReviewNotFoundException();
         }
-        reviewEntityOptional.get().setReview(updateReviewOutDTO.getReview());
-        reviewEntityOptional.get().setRating(updateReviewOutDTO.getRating());
+        reviewEntityOptional.get().setReview(updateReviewInDTO.getReview());
+        reviewEntityOptional.get().setRating(updateReviewInDTO.getRating());
         return reviewMapper.updateReviewOutDTOToReviewOutDTO(reviewEntityOptional.get());
     }
 

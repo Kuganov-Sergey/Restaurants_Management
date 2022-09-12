@@ -1,4 +1,4 @@
-package com.example.restaurants_reviews.dto.out;
+package com.example.restaurants_reviews.dto.in;
 
 import com.example.restaurants_reviews.constraint.ValidPhoneNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateRestaurantOutDTO {
+public class UpdateRestaurantInDTO {
 
     @Schema(description = "name")
     @NotBlank(message = "Empty name")
@@ -29,4 +29,7 @@ public class UpdateRestaurantOutDTO {
     @Schema(description = "email address")
     @Email(message = "Is not email format")
     private String emailAddress;
+
+    @Schema(description = "owner id")
+    private Long ownerId;
 }

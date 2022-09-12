@@ -35,9 +35,3 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: \db\changelog\change_sets\add_restaurant_owner_id_column.sql
-  - changeSet:
-      id: 7
-      author: kuganov
-      changes:
-        - sqlFile:
-            path: \db\changelog\change_sets\drop_constraint_unique_to_restaurant_name.sql

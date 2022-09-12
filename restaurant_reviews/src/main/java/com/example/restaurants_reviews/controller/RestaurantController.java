@@ -4,7 +4,7 @@ import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
 import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
-import com.example.restaurants_reviews.dto.out.UpdateRestaurantOutDTO;
+import com.example.restaurants_reviews.dto.in.UpdateRestaurantInDTO;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
@@ -38,6 +38,6 @@ public interface RestaurantController {
 
     @Operation(summary = "update restaurant by id")
     @PutMapping("/{id}")
-    void updateRestaurantById(@PathVariable Long id, @RequestBody @Valid UpdateRestaurantOutDTO restaurant)
+    void updateRestaurantById(@PathVariable Long id, @RequestBody @Valid UpdateRestaurantInDTO restaurant)
             throws RestaurantNotFoundException;
 }
