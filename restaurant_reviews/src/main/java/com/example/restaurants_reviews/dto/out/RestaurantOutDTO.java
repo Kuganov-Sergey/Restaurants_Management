@@ -32,4 +32,7 @@ public class RestaurantOutDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDate date;
 
+    @Schema(description = "owner_id")
+    private Long ownerId;
+
 }

@@ -2,14 +2,18 @@ package com.example.restaurants_reviews.service.impl;
 
 import com.example.restaurants_reviews.controller.data.RestaurantSmall;
 import com.example.restaurants_reviews.dao.RestaurantRepository;
+import com.example.restaurants_reviews.dao.ReviewRepository;
 import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
+import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
 import com.example.restaurants_reviews.dto.out.UpdateRestaurantOutDTO;
 import com.example.restaurants_reviews.entity.RestaurantEntity;
+import com.example.restaurants_reviews.entity.ReviewEntity;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.mapper.RestaurantMapper;
+import com.example.restaurants_reviews.mapper.ReviewMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
 import com.example.restaurants_reviews.util.PhoneUtil;
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -18,18 +22,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-
     private final RestaurantMapper restaurantMapper;
+    private final ReviewRepository reviewRepository;
+    private final ReviewMapper reviewMapper;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper) {
+    public RestaurantServiceImpl(RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper,
+                                 ReviewRepository reviewRepository, ReviewMapper reviewMapper) {
         this.restaurantRepository = restaurantRepository;
         this.restaurantMapper = restaurantMapper;
+        this.reviewRepository = reviewRepository;
+        this.reviewMapper = reviewMapper;
     }
 
     private RestaurantEntity restaurantNotFoundCheck(String name) throws RestaurantNotFoundException {
@@ -100,5 +109,12 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantOptional.get().setEmailAddress(restaurant.getEmailAddress());
         restaurantOptional.get().setPhoneNumber(restaurant.getPhoneNumber());
         restaurantOptional.get().setName(restaurant.getName());
+    }
+
+    @Override
+    @Transactional
+    public List<ReviewsByRestaurantIdOutDTO> getReviewsByRestaurantId(Long id) {
+        List<ReviewEntity> reviewsById = reviewRepository.getReviewsById(id);
+        return reviewsById.stream().map(reviewMapper::reviewToReviewsByRestaurantIdOutDTO).toList();
     }
 }

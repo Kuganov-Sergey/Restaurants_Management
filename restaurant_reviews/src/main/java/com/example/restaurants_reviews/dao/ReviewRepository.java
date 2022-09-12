@@ -12,10 +12,4 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long> {
     @Query(value = "SELECT rev.id, rev.restaurant_id, rev.review, rev.rating FROM reviews as rev " +
             "WHERE rev.restaurant_id = :id", nativeQuery = true)
     List<ReviewEntity> getReviewsById(@Param("id") Long id);
-
-    @Query(value = "SELECT avg(rating) from reviews " +
-            "join restaurants as re where re.id = :id", nativeQuery = true)
-    double getRatingById(@Param("id") Long id);
-
-
 }

@@ -33,12 +33,10 @@ import java.util.Map;
 public class RestaurantControllerImpl implements RestaurantController {
 
     private final RestaurantService restaurantService;
-    private final ReviewService reviewService;
     private final RestaurantMapper restaurantMapper;
 
-    public RestaurantControllerImpl(RestaurantService restaurantService, ReviewService reviewService, RestaurantMapper restaurantMapper) {
+    public RestaurantControllerImpl(RestaurantService restaurantService, RestaurantMapper restaurantMapper) {
         this.restaurantService = restaurantService;
-        this.reviewService = reviewService;
         this.restaurantMapper = restaurantMapper;
     }
 
@@ -54,7 +52,7 @@ public class RestaurantControllerImpl implements RestaurantController {
 
     @Override
     public Page<ReviewsByRestaurantIdOutDTO> getReviewsById(Long id, Pageable pageable) {
-        List<ReviewsByRestaurantIdOutDTO> reviews = reviewService.getReviewsByRestaurantId(id);
+        List<ReviewsByRestaurantIdOutDTO> reviews = restaurantService.getReviewsByRestaurantId(id);
         return new PageImpl<>(reviews, pageable, reviews.size());
     }
 

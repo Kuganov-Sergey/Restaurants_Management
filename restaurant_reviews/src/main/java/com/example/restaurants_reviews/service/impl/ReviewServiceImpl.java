@@ -34,13 +34,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    @Transactional
-    public List<ReviewsByRestaurantIdOutDTO> getReviewsByRestaurantId(Long id) {
-        List<ReviewEntity> reviewsById = reviewRepository.getReviewsById(id);
-        return reviewsById.stream().map(reviewMapper::reviewToReviewsByRestaurantIdOutDTO).toList();
-    }
-
-    @Override
     public void addReview(Long restaurantId, String text, Integer rate) throws RestaurantNotFoundException {
         Optional<RestaurantEntity> byId = restaurantRepository.findById(restaurantId);
         if (byId.isEmpty()) {
