@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -34,5 +35,8 @@ public class RestaurantOutDTO {
 
     @Schema(description = "owner_id")
     private Long ownerId;
+
+    @Schema(description = "update datetime")
+    private LocalDateTime updateDatetime;
 
 }

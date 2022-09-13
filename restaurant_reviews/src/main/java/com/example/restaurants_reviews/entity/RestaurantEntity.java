@@ -2,9 +2,12 @@ package com.example.restaurants_reviews.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
@@ -33,8 +36,13 @@ public class RestaurantEntity {
     @Column(name = "email_address")
     private String emailAddress;
 
+    @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDate date;
+
+    @UpdateTimestamp
+    @Column(name = "updated_datetime")
+    private LocalDateTime updatedDatetime;
 
     @Column(name = "owner_id")
     private Long ownerId;
