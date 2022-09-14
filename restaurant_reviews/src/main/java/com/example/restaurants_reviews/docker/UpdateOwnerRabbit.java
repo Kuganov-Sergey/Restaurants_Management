@@ -2,6 +2,7 @@ package com.example.restaurants_reviews.docker;
 
 import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantInDTO;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
+import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.service.RestaurantService;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,7 +21,7 @@ public class UpdateOwnerRabbit {
 
     @RabbitListener(queues = "myQueue")
     public void updateOwnerFromUserService(@Payload UpdateOwnerIdRestaurantInDTO updateOwnerIdRestaurantInDTO)
-            throws OwnerNotFoundException {
+            throws OwnerNotFoundException, RestaurantNotFoundException {
         restaurantService.updateOwner(updateOwnerIdRestaurantInDTO);
     }
 }

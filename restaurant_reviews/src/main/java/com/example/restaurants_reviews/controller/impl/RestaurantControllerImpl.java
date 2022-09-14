@@ -4,9 +4,11 @@ import com.example.restaurants_reviews.controller.RestaurantController;
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
+import com.example.restaurants_reviews.dto.out.ReviewSmallOutDTO;
 import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
 import com.example.restaurants_reviews.dto.in.UpdateRestaurantInDTO;
 import com.example.restaurants_reviews.entity.RestaurantEntity;
+import com.example.restaurants_reviews.exception.OwnerNotFoundException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
 import com.example.restaurants_reviews.mapper.RestaurantMapper;
 import com.example.restaurants_reviews.service.RestaurantService;
@@ -50,8 +52,8 @@ public class RestaurantControllerImpl implements RestaurantController {
     }
 
     @Override
-    public Page<ReviewsByRestaurantIdOutDTO> getReviewsById(Long id, Pageable pageable) {
-        List<ReviewsByRestaurantIdOutDTO> reviews = restaurantService.getReviewsByRestaurantId(id);
+    public Page<ReviewSmallOutDTO> getReviewsById(Long id, Pageable pageable) {
+        List<ReviewSmallOutDTO> reviews = restaurantService.getReviewsByRestaurantId(id);
         return new PageImpl<>(reviews, pageable, reviews.size());
     }
 
@@ -66,8 +68,13 @@ public class RestaurantControllerImpl implements RestaurantController {
     }
 
     @Override
-    public void updateRestaurantById(Long id, UpdateRestaurantInDTO restaurant) throws RestaurantNotFoundException {
+    public void updateRestaurantById(Long id, UpdateRestaurantInDTO restaurant) throws RestaurantNotFoundException, OwnerNotFoundException {
         restaurantService.updateRestaurantById(id, restaurant);
+    }
+
+    @Override
+    public Long deleteRestaurantById(Long id) throws RestaurantNotFoundException {
+        return restaurantService.deleteRestaurantById(id);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

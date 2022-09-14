@@ -1,6 +1,8 @@
 package com.example.restaurants_reviews.mapper;
 
+import com.example.restaurants_reviews.data.ReviewSmall;
 import com.example.restaurants_reviews.dto.out.ReviewOutDTO;
+import com.example.restaurants_reviews.dto.out.ReviewSmallOutDTO;
 import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
 import com.example.restaurants_reviews.dto.in.UpdateReviewInDTO;
 import com.example.restaurants_reviews.entity.ReviewEntity;
@@ -20,4 +22,6 @@ public interface ReviewMapper {
     ReviewEntity updateReviewOutDTOToReviewEntity(UpdateReviewInDTO updateReviewInDTO);
 
     ReviewOutDTO updateReviewOutDTOToReviewOutDTO(ReviewEntity reviewEntity);
+
+    ReviewSmallOutDTO reviewSmallToReviewSmallOutDTO(ReviewSmall reviewSmall);
 }

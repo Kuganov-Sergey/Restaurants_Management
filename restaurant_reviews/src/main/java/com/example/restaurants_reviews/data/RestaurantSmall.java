@@ -1,4 +1,4 @@
-package com.example.restaurants_reviews.controller.data;
+package com.example.restaurants_reviews.data;
 
 import java.math.BigDecimal;
 

@@ -1,6 +1,6 @@
 package com.example.restaurants_reviews.dao;
 
-import com.example.restaurants_reviews.controller.data.RestaurantSmall;
+import com.example.restaurants_reviews.data.RestaurantSmall;
 import com.example.restaurants_reviews.entity.RestaurantEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

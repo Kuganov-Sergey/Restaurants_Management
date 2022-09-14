@@ -41,3 +41,9 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: \db\changelog\change_sets\add_update_date.sql
+  - changeSet:
+      id: 8
+      author: kuganov
+      changes:
+        - sqlFile:
+            path: \db\changelog\change_sets\add_column_is_deleted.sql

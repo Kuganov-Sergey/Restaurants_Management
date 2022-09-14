@@ -3,7 +3,9 @@ package com.example.restaurants_reviews.entity;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,6 +16,8 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE restaurants SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 @Table(name = "restaurants")
 public class RestaurantEntity {
 
@@ -46,6 +50,9 @@ public class RestaurantEntity {
 
     @Column(name = "owner_id")
     private Long ownerId;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
 
     @Override
     public boolean equals(Object o) {

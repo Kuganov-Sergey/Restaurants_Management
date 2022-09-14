@@ -26,7 +26,7 @@ public class RestaurantOutDTO {
     @Schema(description = "email address")
     private String emailAddress;
 
-    @Schema(description = "phone num")
+    @Schema(description = "phone number")
     private String phoneNumber;
 
     @Schema(description = "creation date")

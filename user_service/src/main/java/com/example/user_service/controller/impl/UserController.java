@@ -63,7 +63,7 @@ public class UserController implements UserControllerI {
 
     @Override
     public UserOutDTO getUser(Long id) throws UserNotFoundException {
-        rabbitTemplate.convertAndSend("myQueue", "Hello World!", String.class);
+//        rabbitTemplate.convertAndSend("myQueue", "Hello World!", String.class);
         return userService.getUser(id);
     }
 
