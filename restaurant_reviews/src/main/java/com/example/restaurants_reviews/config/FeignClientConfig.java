@@ -1,6 +1,8 @@
-package com.example.restaurants_reviews.util;
+package com.example.restaurants_reviews.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import feign.codec.Decoder;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -12,7 +14,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
-public class FooClientConfig {
+public class FeignClientConfig {
 
     @Bean
     public Decoder feignDecoder() {
@@ -26,7 +28,8 @@ public class FooClientConfig {
     }
 
     public ObjectMapper customObjectMapper(){
-        //Customize as much as you want
-        return new ObjectMapper();
+        return JsonMapper.builder()
+                .addModule(new JavaTimeModule())
+                .build();
     }
 }

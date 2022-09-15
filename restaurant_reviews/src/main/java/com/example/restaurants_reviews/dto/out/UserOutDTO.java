@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode
-@Tag(name = "user", description = "dto for creation of new user")
+@Tag(name = "user", description = "dto for check exist user")
 public class UserOutDTO {
 
     @Schema(description = "user id")
@@ -34,5 +35,5 @@ public class UserOutDTO {
     @Schema(description = "Date of registration user")
     @EqualsAndHashCode.Exclude
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private LocalDateTime registration_date;
+    private LocalDate registration_date;
 }

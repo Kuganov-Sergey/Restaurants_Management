@@ -2,11 +2,10 @@ package com.example.restaurants_reviews.controller.impl;
 
 import com.example.restaurants_reviews.controller.RestaurantController;
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
+import com.example.restaurants_reviews.dto.in.UpdateRestaurantInDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
 import com.example.restaurants_reviews.dto.out.ReviewSmallOutDTO;
-import com.example.restaurants_reviews.dto.out.ReviewsByRestaurantIdOutDTO;
-import com.example.restaurants_reviews.dto.in.UpdateRestaurantInDTO;
 import com.example.restaurants_reviews.entity.RestaurantEntity;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
 import com.example.restaurants_reviews.exception.RestaurantNotFoundException;

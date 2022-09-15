@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
 
-    @Mapping(target = "restaurant_id", ignore = true)
+    @Mapping(target = "restaurant_id", source = "restaurant_id.id")
     ReviewOutDTO reviewToReviewOutDTO(ReviewEntity reviewEntity);
 
     ReviewsByRestaurantIdOutDTO reviewToReviewsByRestaurantIdOutDTO(ReviewEntity reviewEntity);
@@ -21,6 +21,7 @@ public interface ReviewMapper {
     @Mapping(target = "id", ignore = true)
     ReviewEntity updateReviewOutDTOToReviewEntity(UpdateReviewInDTO updateReviewInDTO);
 
+    @Mapping(target = "restaurant_id", source = "restaurant_id.id")
     ReviewOutDTO updateReviewOutDTOToReviewOutDTO(ReviewEntity reviewEntity);
 
     ReviewSmallOutDTO reviewSmallToReviewSmallOutDTO(ReviewSmall reviewSmall);

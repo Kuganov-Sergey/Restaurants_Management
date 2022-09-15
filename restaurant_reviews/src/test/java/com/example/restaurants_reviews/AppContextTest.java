@@ -1,56 +1,29 @@
 package com.example.restaurants_reviews;
 
-import com.example.restaurants_reviews.dao.RestaurantRepository;
-import com.example.restaurants_reviews.entity.RestaurantEntity;
-import com.example.restaurants_reviews.entity.ReviewEntity;
-import com.example.restaurants_reviews.exception.RestaurantNotFoundException;
-import com.example.restaurants_reviews.service.RestaurantService;
-import com.example.restaurants_reviews.service.ReviewService;
-import com.google.i18n.phonenumbers.NumberParseException;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.restaurants_reviews.feign_clients.UserServiceClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(classes = {
         RestaurantsReviewsApplication.class})
 @ActiveProfiles("test")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AppContextTest {
 
     @Autowired
-    private RestaurantService restaurantService;
+    private MockMvc mockMvc;
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    private ObjectMapper objectMapper;
 
-    @Autowired
-    private ReviewService reviewService;
-
-    @BeforeAll
-    void addRestaurantsAndReviewsInDB() throws RestaurantNotFoundException {
-        RestaurantEntity restaurant = new RestaurantEntity();
-        restaurant.setName("mac");
-        restaurant.setDescription("burgers");
-        restaurantService.addRestaurant(restaurant);
-        ReviewEntity review = new ReviewEntity();
-        review.setReview("best place");
-        review.setRestaurant_id(restaurantService.getAllRestaurants(Pageable.unpaged()).toList().get(0));
-        review.setRating(5);
-        reviewService.addReview(review.getRestaurant_id().getId(), review.getReview(), review.getRating());
-    }
-
-//    @BeforeEach
-//    void setDefaultParameters() throws NumberParseException, RestaurantNotFoundException {
-//        restaurantService.addPhoneByRestaurantName("mac", "+79997771122");
+//    @Bean
+//    public UserServiceClient userServiceClientMock() {
+//        return Mockito.mock(UserServiceClient.class);
 //    }
-
-    @AfterAll
-    void cleanTable() {
-        restaurantRepository.deleteAll();
-    }
 }

@@ -1,9 +1,12 @@
 package com.example.restaurants_reviews.dto.out;
 
+import com.example.restaurants_reviews.entity.KitchenTypeE;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -37,6 +40,11 @@ public class RestaurantOutDTO {
     private Long ownerId;
 
     @Schema(description = "update datetime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDateTime updateDatetime;
+
+    @Schema(description = "kitchen type")
+    @Enumerated(value = EnumType.STRING)
+    private KitchenTypeE kitchenTypeE;
 
 }

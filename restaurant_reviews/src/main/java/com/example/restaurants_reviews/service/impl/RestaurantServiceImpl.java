@@ -1,6 +1,6 @@
 package com.example.restaurants_reviews.service.impl;
 
-import com.example.restaurants_reviews.clients.UserServiceClient;
+import com.example.restaurants_reviews.feign_clients.UserServiceClient;
 import com.example.restaurants_reviews.data.RestaurantSmall;
 import com.example.restaurants_reviews.data.ReviewSmall;
 import com.example.restaurants_reviews.dao.RestaurantRepository;
@@ -122,6 +122,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantOptional.get().setPhoneNumber(restaurant.getPhoneNumber());
         restaurantOptional.get().setName(restaurant.getName());
         restaurantOptional.get().setOwnerId(restaurant.getOwnerId());
+        restaurantOptional.get().setKitchenTypeE(restaurant.getKitchenTypeE());
     }
 
     @Override

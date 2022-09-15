@@ -1,8 +1,8 @@
 package com.example.restaurants_reviews.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
@@ -40,7 +40,6 @@ public class RestaurantEntity {
     @Column(name = "email_address")
     private String emailAddress;
 
-    @CreationTimestamp
     @Column(name = "creation_date")
     private LocalDate date;
 
@@ -53,6 +52,10 @@ public class RestaurantEntity {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted = false;
+
+    @Column(name = "kitchen_type")
+    @Enumerated(value = EnumType.STRING)
+    private KitchenTypeE kitchenTypeE;
 
     @Override
     public boolean equals(Object o) {

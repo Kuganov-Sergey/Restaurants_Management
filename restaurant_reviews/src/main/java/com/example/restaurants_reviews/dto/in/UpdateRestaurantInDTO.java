@@ -1,11 +1,15 @@
 package com.example.restaurants_reviews.dto.in;
 
 import com.example.restaurants_reviews.constraint.ValidPhoneNumber;
+import com.example.restaurants_reviews.entity.KitchenTypeE;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -32,4 +36,8 @@ public class UpdateRestaurantInDTO {
 
     @Schema(description = "owner id")
     private Long ownerId;
+
+    @Schema(description = "kitchen type")
+    @NotNull(message = "Empty type")
+    private KitchenTypeE kitchenTypeE;
 }

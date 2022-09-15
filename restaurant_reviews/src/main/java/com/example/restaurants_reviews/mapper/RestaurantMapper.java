@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface RestaurantMapper {
 
-    @Mapping(target = "updateDatetime", ignore = true)
+    @Mapping(target = "updateDatetime", source = "updatedDatetime")
     RestaurantOutDTO restaurantToRestaurantOutDTO(RestaurantEntity restaurantEntity);
 
     @Mapping(target = "updatedDatetime", ignore = true)
