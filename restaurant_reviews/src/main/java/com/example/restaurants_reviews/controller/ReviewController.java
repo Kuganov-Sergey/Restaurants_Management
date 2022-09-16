@@ -22,7 +22,7 @@ public interface ReviewController {
     ReviewOutDTO updateReview(@Valid @RequestBody UpdateReviewInDTO updateReviewInDTO, @PathVariable Long id)
             throws ReviewNotFoundException;
 
-    @Operation(summary = "Get reviews by id")
+    @Operation(summary = "Get review by id")
     @GetMapping("{id}")
     ReviewOutDTO getReviewById(@PathVariable Long id) throws ReviewNotFoundException;
 }

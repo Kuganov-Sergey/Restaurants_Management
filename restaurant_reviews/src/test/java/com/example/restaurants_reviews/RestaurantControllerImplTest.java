@@ -2,15 +2,12 @@ package com.example.restaurants_reviews;
 
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.in.UpdateRestaurantInDTO;
-import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
 import com.example.restaurants_reviews.dto.out.UserOutDTO;
 import com.example.restaurants_reviews.entity.KitchenTypeE;
 import com.example.restaurants_reviews.feign_clients.UserServiceClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,35 +35,6 @@ public class RestaurantControllerImplTest extends AppContextTest {
     @Autowired
     private UserServiceClient userServiceClient;
 
-    @BeforeEach
-    void beforeAddRestaurant() throws Exception {
-        RestaurantInDTO restaurant = RestaurantInDTO.builder()
-                .description("test")
-                .phoneNumber("+79996665522")
-                .emailAddress("test@mail.ru")
-                .date(LocalDate.of(2000, 10, 10))
-                .name("test")
-                .kitchenTypeE(KitchenTypeE.ASIAN)
-                .build();
-        RestaurantInDTO restaurant2 = RestaurantInDTO.builder()
-                .description("test2")
-                .phoneNumber("+79995555555")
-                .emailAddress("test2@mail.ru")
-                .date(LocalDate.of(2002, 12, 12))
-                .name("test2")
-                .kitchenTypeE(KitchenTypeE.ASIAN)
-                .build();
-        objectMapper.registerModule(new JavaTimeModule());
-        String obj = objectMapper.writeValueAsString(restaurant);
-        this.mockMvc.perform(post("/restaurant")
-                        .contentType(MediaType.APPLICATION_JSON).content(obj))
-                .andExpect(status().isOk());
-        String obj2 = objectMapper.writeValueAsString(restaurant2);
-        this.mockMvc.perform(post("/restaurant")
-                        .contentType(MediaType.APPLICATION_JSON).content(obj2))
-                .andExpect(status().isOk());
-    }
-
     @Test
     void deleteRestaurantById() throws Exception {
         this.mockMvc.perform(delete("/restaurant/{id}", 2))
@@ -75,10 +43,15 @@ public class RestaurantControllerImplTest extends AppContextTest {
                 .andExpect(content().string("2"));
     }
 
-//    @Test
-//    void getSmallListRestaurants() {
-//
-//    }
+    @Test
+    void getSmallListRestaurants() throws Exception {
+        this.mockMvc.perform(get("/restaurant/smallList"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.id").value(1L))
+                .andExpect(jsonPath("$.content.name").value("test"))
+                .andExpect(jsonPath("$.content.avg").value(4));
+    }
 
     @Test
     void updateRestaurantById() throws Exception {
