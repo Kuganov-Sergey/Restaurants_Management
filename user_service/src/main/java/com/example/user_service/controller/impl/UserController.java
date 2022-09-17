@@ -1,13 +1,13 @@
 package com.example.user_service.controller.impl;
 
-import com.example.user_service.DTO.in.NewPasswordUserInDTO;
-import com.example.user_service.DTO.in.UserInDTO;
+import com.example.user_service.DTO.in.*;
 import com.example.user_service.DTO.out.DeleteOwnerInRestaurantOutDTO;
 import com.example.user_service.DTO.out.UpdateOwnerIdRestaurantOutDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.controller.UserControllerI;
 import com.example.user_service.entity.UserEntity;
 import com.example.user_service.exception.PasswordsDontMatchException;
+import com.example.user_service.exception.RoleNotFoundException;
 import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
 import com.example.user_service.service.impl.UserService;
@@ -31,11 +31,9 @@ import java.util.Map;
 public class UserController implements UserControllerI {
 
     private final UserService userService;
-    private final RabbitMessageOperations rabbitTemplate;
-    @Autowired
-    public UserController(UserService userService, RabbitMessageOperations rabbitTemplate) {
+
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -44,26 +42,23 @@ public class UserController implements UserControllerI {
     }
 
     @Override
-    public UserOutDTO updateUser(UserEntity userEntity, Long id) throws UserNotFoundException {
-        return userService.updateUser(userEntity, id);
+    public UserOutDTO updateUser(UpdateUserInDTO userInDTO, Long id) throws UserNotFoundException {
+        return userService.updateUser(userInDTO, id);
     }
 
     @Override
-    public Long deleteAndUpdateUser(Long id, Long newUserId) throws UserNotFoundException {
-        rabbitTemplate.convertAndSend("myQueue", new UpdateOwnerIdRestaurantOutDTO(id, newUserId));
-        return newUserId;
+    public Long changeUserFromRestaurant(ChangeUserFromRestaurantInDTO changeUserFromRestaurantInDTO)
+            throws UserNotFoundException {
+        return userService.changeUserFromRestaurant(changeUserFromRestaurantInDTO);
     }
 
     @Override
     public Long deleteUser(Long id) throws UserNotFoundException {
-        Long userId = userService.deleteUser(id);
-        rabbitTemplate.convertAndSend("myQueue", new DeleteOwnerInRestaurantOutDTO(userId));
-        return userId;
+        return userService.deleteUser(id);
     }
 
     @Override
     public UserOutDTO getUser(Long id) throws UserNotFoundException {
-//        rabbitTemplate.convertAndSend("myQueue", "Hello World!", String.class);
         return userService.getUser(id);
     }
 
@@ -73,18 +68,20 @@ public class UserController implements UserControllerI {
     }
 
     @Override
-    public void newPassword(NewPasswordUserInDTO newPasswordUserInDTO) throws PasswordsDontMatchException {
+    public void changePasswordByUserEmailAndOldPassword(NewPasswordUserInDTO newPasswordUserInDTO)
+            throws PasswordsDontMatchException {
         userService.newPassword(newPasswordUserInDTO);
     }
 
     @Override
-    public void addRoleToUser(Long userId, Long roleId) {
-        userService.addRoleToUser(userId, roleId);
+    public void addRoleToUser(AddRoleToUserInDTO addRoleToUserInDTO) throws UserNotFoundException,
+            RoleNotFoundException {
+        userService.addRoleToUser(addRoleToUserInDTO);
     }
 
     @Override
-    public void deleteRoleByUserIdAndRoleId(Long userId, Long roleId) {
-        userService.deleteRoleFromUser(userId, roleId);
+    public void deleteRoleFromUserByUserRolesId(Long userId) {
+        userService.deleteRoleFromUserByUserRolesId(userId);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

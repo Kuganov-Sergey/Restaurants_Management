@@ -15,7 +15,11 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
 
     @Modifying
     @Query("update RestaurantEntity as r set r.ownerId = :newOwnerId where r.ownerId = :oldOwnerId")
-    void updateUserSetStatusForName(@Param("newOwnerId") Long newOwnerId, @Param("oldOwnerId") Long oldOwnerId);
+    void updateOwner(@Param("newOwnerId") Long newOwnerId, @Param("oldOwnerId") Long oldOwnerId);
+
+    @Modifying
+    @Query("update RestaurantEntity as r set r.ownerId = null where r.ownerId = :oldOwnerId")
+    void deleteOwnerFromAllRestaurants(@Param("oldOwnerId") Long oldOwnerId);
 
     @Query(value =
             "select restaurants.id as id , max(restaurants.name) as name, avg(reviews.rating) as avg " +

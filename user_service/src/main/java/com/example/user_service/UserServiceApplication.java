@@ -20,11 +20,6 @@ public class UserServiceApplication {
         SpringApplication.run(UserServiceApplication.class, args);
     }
 
-    @Bean("myQueue")
-    public Queue myQueue() {
-        return new Queue("myQueue", false);
-    }
-
     @Bean
     public MessageConverter jsonMessageConverter() {
         return new Jackson2JsonMessageConverter();

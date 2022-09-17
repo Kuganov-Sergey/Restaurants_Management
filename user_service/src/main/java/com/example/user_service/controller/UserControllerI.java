@@ -1,10 +1,10 @@
 package com.example.user_service.controller;
 
-import com.example.user_service.DTO.in.NewPasswordUserInDTO;
-import com.example.user_service.DTO.in.UserInDTO;
+import com.example.user_service.DTO.in.*;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.entity.UserEntity;
 import com.example.user_service.exception.PasswordsDontMatchException;
+import com.example.user_service.exception.RoleNotFoundException;
 import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,17 +25,9 @@ public interface UserControllerI {
     @PostMapping
     UserOutDTO createUser(@RequestBody @Valid UserInDTO userInDTO) throws UserEmailIsAlreadyExist;
 
-    @Operation(summary = "Update user by id")
-    @PutMapping("/{id}")
-    UserOutDTO updateUser(@RequestBody UserEntity userEntity, @PathVariable Long id) throws UserNotFoundException;
-
     @Operation(summary = "Delete user by id")
     @DeleteMapping("/{id}")
     Long deleteUser(@PathVariable Long id) throws UserNotFoundException;
-
-    //TODO не правильно, нужно додумать
-    @DeleteMapping("/{id}/replace/{newUserId}")
-    Long deleteAndUpdateUser(@PathVariable Long id, @PathVariable Long newUserId) throws UserNotFoundException;
 
     @Operation(summary = "Get user by id")
     @ApiResponses(value = {
@@ -54,15 +46,24 @@ public interface UserControllerI {
     @GetMapping
     Page<UserEntity> getAll(Pageable pageable);
 
-    @Operation(summary = "Create new password for user")
-    @PutMapping("/password")
-    void newPassword(@RequestBody @Valid NewPasswordUserInDTO newPasswordUserInDTO) throws PasswordsDontMatchException;
+    @Operation(summary = "Update user by id")
+    @PutMapping("/{id}")
+    UserOutDTO updateUser(@RequestBody UpdateUserInDTO userInDTO, @PathVariable Long id) throws UserNotFoundException;
 
     @Operation(summary = "Add role to user")
-    @PutMapping("/{userId}/{roleId}")
-    void addRoleToUser(@PathVariable Long userId,@PathVariable Long roleId);
+    @PutMapping("/role")
+    void addRoleToUser(@RequestBody AddRoleToUserInDTO addRoleToUserInDTO) throws UserNotFoundException, RoleNotFoundException;
 
-    @Operation(summary = "Delete role by user.id and role.id")
-    @DeleteMapping("/{userId}/{roleId}")
-    void deleteRoleByUserIdAndRoleId(@PathVariable Long userId, @PathVariable Long roleId);
+    @Operation(summary = "Create new password for user by email and old password")
+    @PutMapping("/password")
+    void changePasswordByUserEmailAndOldPassword(@RequestBody @Valid NewPasswordUserInDTO newPasswordUserInDTO) 
+            throws PasswordsDontMatchException;
+
+    @Operation(summary = "Delete role by role id")
+    @DeleteMapping("/{id}/role")
+    void deleteRoleFromUserByUserRolesId(@PathVariable Long id);
+
+    @PutMapping("/changeUser")
+    Long changeUserFromRestaurant(@RequestBody ChangeUserFromRestaurantInDTO changeUserFromRestaurantInDTO)
+            throws UserNotFoundException;
 }

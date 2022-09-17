@@ -1,4 +1,4 @@
-package com.example.restaurants_reviews.dto.in;
+package com.example.user_service.DTO.in;
 
 import lombok.*;
 
@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Data
-public class UpdateOwnerIdRestaurantInDTO {
+public class UpdateOwnerIdRestaurantOutDTO {
 
     private Long oldId;
     private Long newId;

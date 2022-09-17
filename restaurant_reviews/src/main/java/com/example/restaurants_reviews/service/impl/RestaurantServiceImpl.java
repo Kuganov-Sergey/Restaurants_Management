@@ -1,14 +1,11 @@
 package com.example.restaurants_reviews.service.impl;
 
+import com.example.restaurants_reviews.dto.out.*;
 import com.example.restaurants_reviews.feign_clients.UserServiceClient;
 import com.example.restaurants_reviews.data.RestaurantSmall;
 import com.example.restaurants_reviews.data.ReviewSmall;
 import com.example.restaurants_reviews.dao.RestaurantRepository;
 import com.example.restaurants_reviews.dao.ReviewRepository;
-import com.example.restaurants_reviews.dto.in.UpdateOwnerIdRestaurantInDTO;
-import com.example.restaurants_reviews.dto.out.RestaurantOutDTO;
-import com.example.restaurants_reviews.dto.out.RestaurantSmallOutDTO;
-import com.example.restaurants_reviews.dto.out.ReviewSmallOutDTO;
 import com.example.restaurants_reviews.dto.in.UpdateRestaurantInDTO;
 import com.example.restaurants_reviews.entity.RestaurantEntity;
 import com.example.restaurants_reviews.exception.OwnerNotFoundException;
@@ -76,18 +73,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public void updateOwner(UpdateOwnerIdRestaurantInDTO updateOwnerIdRestaurantInDTO) throws OwnerNotFoundException, RestaurantNotFoundException {
-        Optional<RestaurantEntity> restaurant = restaurantRepository
-                .findById(updateOwnerIdRestaurantInDTO.getOldId());
-        if (restaurant.isEmpty()) {
-            throw new RestaurantNotFoundException();
-        }
-        if (userServiceClient.getUser(updateOwnerIdRestaurantInDTO.getNewId())
-                .getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            throw new OwnerNotFoundException();
-        }
-        restaurantRepository.updateUserSetStatusForName(updateOwnerIdRestaurantInDTO.getNewId(),
-                updateOwnerIdRestaurantInDTO.getOldId());
+    public void updateOwnerInAllRestaurants(UpdateOwnerIdRestaurantOutDTO updateOwnerIdRestaurantOutDTO) {
+        restaurantRepository.updateOwner(updateOwnerIdRestaurantOutDTO.getNewUserId(),
+                updateOwnerIdRestaurantOutDTO.getOldUserId());
     }
 
     @Override
@@ -141,5 +129,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         restaurantRepository.deleteById(id);
         return id;
+    }
+
+    @Override
+    @Transactional
+    public void deleteOwnerFromAllRestaurants(DeleteOwnerInRestaurantOutDTO deleteOwnerInRestaurantOutDTO) {
+        restaurantRepository.deleteOwnerFromAllRestaurants(deleteOwnerInRestaurantOutDTO.getOwnerId());
     }
 }

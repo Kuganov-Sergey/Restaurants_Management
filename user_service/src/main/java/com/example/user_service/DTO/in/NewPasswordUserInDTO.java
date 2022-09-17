@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Schema(description = "DTO to update password to User Entity")
+@Schema(description = "DTO to update password to User Entity by email address")
 @Data
 public class NewPasswordUserInDTO {
 

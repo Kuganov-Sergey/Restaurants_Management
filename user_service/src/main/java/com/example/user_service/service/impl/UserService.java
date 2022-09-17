@@ -1,17 +1,21 @@
 package com.example.user_service.service.impl;
 
+import com.example.user_service.DAO.RoleRepository;
 import com.example.user_service.DAO.UserRepository;
 import com.example.user_service.DAO.UserRolesRepository;
-import com.example.user_service.DTO.in.NewPasswordUserInDTO;
-import com.example.user_service.DTO.in.UserInDTO;
+import com.example.user_service.DTO.in.*;
+import com.example.user_service.DTO.out.DeleteOwnerInRestaurantOutDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
+import com.example.user_service.entity.RoleEntity;
 import com.example.user_service.entity.UserEntity;
 import com.example.user_service.entity.UserRolesEntity;
 import com.example.user_service.exception.PasswordsDontMatchException;
+import com.example.user_service.exception.RoleNotFoundException;
 import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
 import com.example.user_service.mapper.UserMapper;
 import com.example.user_service.service.UserServiceI;
+import org.springframework.amqp.rabbit.core.RabbitMessageOperations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,11 +30,16 @@ public class UserService implements UserServiceI {
     private final UserRepository userRepository;
     private final UserRolesRepository userRolesRepository;
     private final UserMapper userMapper;
+    private final RoleRepository roleRepository;
+    private final RabbitMessageOperations rabbitTemplate;
 
-    public UserService(UserRepository userRepository, UserRolesRepository userRolesRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserRolesRepository userRolesRepository, UserMapper userMapper,
+                       RoleRepository roleRepository, RabbitMessageOperations rabbitTemplate) {
         this.userRepository = userRepository;
         this.userRolesRepository = userRolesRepository;
         this.userMapper = userMapper;
+        this.roleRepository = roleRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -45,17 +54,17 @@ public class UserService implements UserServiceI {
 
     @Override
     @Transactional
-    public UserOutDTO updateUser(UserEntity userEntity, Long id) throws UserNotFoundException {
+    public UserOutDTO updateUser(UpdateUserInDTO userInDTO, Long id) throws UserNotFoundException {
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException();
         }
-        userEntity.setId(id);
-        userEntity.setRegistration_date(optionalUser.get().getRegistration_date());
-        userEntity.setEmail(optionalUser.get().getEmail());
-        userEntity.setPassword(optionalUser.get().getPassword());
+        optionalUser.get().setName(userInDTO.getName());
+        optionalUser.get().setSurname(userInDTO.getSurname());
+        optionalUser.get().setLastname(userInDTO.getLastname());
+        optionalUser.get().setPassword(userInDTO.getPassword());
         return userMapper
-                .userEntityToUserOutDTO(userRepository.save(userEntity));
+                .userEntityToUserOutDTO(userRepository.save(optionalUser.get()));
     }
 
     @Override
@@ -64,8 +73,9 @@ public class UserService implements UserServiceI {
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException();
         }
-        userRepository.delete(optionalUser.get());
-        return optionalUser.get().getId();
+        rabbitTemplate.convertAndSend("queueForDeleteOwner", new DeleteOwnerInRestaurantOutDTO(id));
+        userRepository.deleteById(id);
+        return id;
     }
 
     @Override
@@ -93,15 +103,33 @@ public class UserService implements UserServiceI {
     }
 
     @Override
-    public void addRoleToUser(Long userId, Long roleId) {
+    public void addRoleToUser(AddRoleToUserInDTO addRoleToUserInDTO) throws RoleNotFoundException,
+            UserNotFoundException {
+        Optional<RoleEntity> role = roleRepository.findById(addRoleToUserInDTO.getRoleId());
+        Optional<UserEntity> user = userRepository.findById(addRoleToUserInDTO.getUserId());
+        if (role.isEmpty()) {
+            throw new RoleNotFoundException();
+        } else if (user.isEmpty()) {
+            throw new UserNotFoundException();
+        }
         UserRolesEntity userRolesEntity = new UserRolesEntity();
-        userRolesEntity.setUserId(userId);
-        userRolesEntity.setRoleId(roleId);
+        userRolesEntity.setUserId(addRoleToUserInDTO.getUserId());
+        userRolesEntity.setRoleId(addRoleToUserInDTO.getRoleId());
         userRolesRepository.save(userRolesEntity);
     }
 
     @Override
-    public void deleteRoleFromUser(Long userId, Long roleId) {
-        userRolesRepository.deleteByUserIdAndRoleId(userId, roleId);
+    public void deleteRoleFromUserByUserRolesId(Long id) {
+        roleRepository.deleteById(id);
+    }
+
+    @Override
+    public Long changeUserFromRestaurant(ChangeUserFromRestaurantInDTO changeUserFromRestaurantInDTO) throws UserNotFoundException {
+        Optional<UserEntity> user = userRepository.findById(changeUserFromRestaurantInDTO.getOldUserId());
+        if (user.isEmpty()) {
+            throw new UserNotFoundException();
+        }
+        rabbitTemplate.convertAndSend("queueForUpdateOwner", changeUserFromRestaurantInDTO);
+        return changeUserFromRestaurantInDTO.getNewUserId();
     }
 }
