@@ -30,7 +30,7 @@ public class ReviewControllerImplTest extends AppContextTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.restaurant_id").value(1L))
+                .andExpect(jsonPath("$.restaurantId").value(1L))
                 .andExpect(jsonPath("$.review").value("test"))
                 .andExpect(jsonPath("$.rating").value(4));
     }
@@ -38,8 +38,8 @@ public class ReviewControllerImplTest extends AppContextTest {
     @Test
     void updateReview() throws Exception {
         UpdateReviewInDTO updateReviewInDTO = UpdateReviewInDTO.builder()
-                .review("test2")
-                .rating(5)
+                .review("test")
+                .rating(4)
                 .build();
         objectMapper.registerModule(new JavaTimeModule());
         String obj = objectMapper.writeValueAsString(updateReviewInDTO);

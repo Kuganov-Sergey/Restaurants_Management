@@ -21,7 +21,7 @@ public class ReviewEntity {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
-    private RestaurantEntity restaurant_id;
+    private RestaurantEntity restaurantId;
 
     @Column(name = "review")
     private String review;
@@ -29,8 +29,8 @@ public class ReviewEntity {
     @Column(name = "rating")
     private Integer rating;
 
-    public ReviewEntity(RestaurantEntity restaurant_Entity_id, String review, Integer rating) {
-        this.restaurant_id = restaurant_Entity_id;
+    public ReviewEntity(RestaurantEntity restaurantId, String review, Integer rating) {
+        this.restaurantId = restaurantId;
         this.review = review;
         this.rating = rating;
     }

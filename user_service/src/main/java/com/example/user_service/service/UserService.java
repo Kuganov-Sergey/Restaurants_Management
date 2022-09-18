@@ -10,7 +10,7 @@ import com.example.user_service.exception.UserNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface UserServiceI {
+public interface UserService {
     UserOutDTO createUser(UserInDTO userInDTO) throws UserEmailIsAlreadyExist;
     UserOutDTO updateUser(UpdateUserInDTO userInDTO, Long id) throws UserNotFoundException;
     Long deleteUser(Long id) throws UserNotFoundException;

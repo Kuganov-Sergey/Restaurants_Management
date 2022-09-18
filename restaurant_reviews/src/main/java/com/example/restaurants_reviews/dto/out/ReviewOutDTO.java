@@ -15,7 +15,7 @@ public class ReviewOutDTO {
     private Long id;
 
     @Schema(description = "restaurant id")
-    private Long restaurant_id;
+    private Long restaurantId;
 
     @Schema(description = "review text")
     private String review;

@@ -30,7 +30,7 @@ public class ReviewControllerImpl implements ReviewController {
     }
 
     public ReviewInDTO addReview(@RequestBody ReviewInDTO reviewInDTO) throws RestaurantNotFoundException {
-        reviewService.addReview(reviewInDTO.getRestaurant_id(), reviewInDTO.getReview(), reviewInDTO.getRating());
+        reviewService.addReview(reviewInDTO.getRestaurantId(), reviewInDTO.getReview(), reviewInDTO.getRating());
         return reviewInDTO;
     }
 

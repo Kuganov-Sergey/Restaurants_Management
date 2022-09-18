@@ -1,9 +1,15 @@
 package com.example.user_service.DTO.in;
 
-import lombok.Data;
+import com.example.user_service.constraint.ValidPhoneNumber;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
 public class UpdateUserInDTO {
 
@@ -18,4 +24,7 @@ public class UpdateUserInDTO {
 
     @NotBlank(message = "Password cannot be null")
     private String password;
+
+    @ValidPhoneNumber(message = "Invalid format of phone number")
+    private String phoneNumber;
 }

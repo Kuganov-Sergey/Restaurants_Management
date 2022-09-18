@@ -37,11 +37,15 @@ public class UserEntity {
     @Column(name = "registration_date")
     @CreationTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private LocalDateTime registration_date;
+    private LocalDateTime registrationDate;
 
     @Column(name = "password")
     @ColumnDefault(value = "12345")
     private String password;
+
+    @Basic
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

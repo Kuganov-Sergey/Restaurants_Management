@@ -1,19 +1,19 @@
 package com.example.user_service.controller.impl;
 
-import com.example.user_service.controller.RoleControllerI;
+import com.example.user_service.controller.RoleController;
 import com.example.user_service.entity.RoleEntity;
 import com.example.user_service.exception.RoleNotFoundException;
-import com.example.user_service.service.RoleServiceI;
+import com.example.user_service.service.RoleService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/role")
-public class RoleController implements RoleControllerI {
+public class RoleControllerImpl implements RoleController {
 
-    private final RoleServiceI roleService;
+    private final RoleService roleService;
 
-    public RoleController(RoleServiceI roleService) {
+    public RoleControllerImpl(RoleService roleService) {
         this.roleService = roleService;
     }
 

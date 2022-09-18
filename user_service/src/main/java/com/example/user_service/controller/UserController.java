@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 @Tag(name = "user", description = "The user API")
 @RequestMapping("/user")
-public interface UserControllerI {
+public interface UserController {
 
     @Operation(summary = "Create new user")
     @PostMapping
@@ -40,7 +40,7 @@ public interface UserControllerI {
             )
     })
     @GetMapping("/{id}")
-    UserOutDTO getUser(@PathVariable Long id) throws UserNotFoundException;
+    UserOutDTO getUserById(@PathVariable Long id) throws UserNotFoundException;
 
     @Operation(summary = "Get all users")
     @GetMapping

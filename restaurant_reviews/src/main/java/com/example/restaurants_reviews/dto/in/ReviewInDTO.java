@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class ReviewInDTO {
 
     @ValidRestaurantExists(message = "Restaurant is not exist")
-    private Long restaurant_id;
+    private Long restaurantId;
 
     @NotBlank(message = "Empty review!")
     private String review;

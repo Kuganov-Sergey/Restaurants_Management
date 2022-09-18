@@ -14,7 +14,7 @@ import com.example.user_service.exception.RoleNotFoundException;
 import com.example.user_service.exception.UserEmailIsAlreadyExist;
 import com.example.user_service.exception.UserNotFoundException;
 import com.example.user_service.mapper.UserMapper;
-import com.example.user_service.service.UserServiceI;
+import com.example.user_service.service.UserService;
 import org.springframework.amqp.rabbit.core.RabbitMessageOperations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserServiceI {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserRolesRepository userRolesRepository;
@@ -33,8 +33,8 @@ public class UserService implements UserServiceI {
     private final RoleRepository roleRepository;
     private final RabbitMessageOperations rabbitTemplate;
 
-    public UserService(UserRepository userRepository, UserRolesRepository userRolesRepository, UserMapper userMapper,
-                       RoleRepository roleRepository, RabbitMessageOperations rabbitTemplate) {
+    public UserServiceImpl(UserRepository userRepository, UserRolesRepository userRolesRepository, UserMapper userMapper,
+                           RoleRepository roleRepository, RabbitMessageOperations rabbitTemplate) {
         this.userRepository = userRepository;
         this.userRolesRepository = userRolesRepository;
         this.userMapper = userMapper;

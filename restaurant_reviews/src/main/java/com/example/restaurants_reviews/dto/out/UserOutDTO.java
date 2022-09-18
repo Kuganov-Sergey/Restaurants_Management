@@ -35,5 +35,5 @@ public class UserOutDTO {
     @Schema(description = "Date of registration user")
     @EqualsAndHashCode.Exclude
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-    private LocalDate registration_date;
+    private LocalDate registrationDate;
 }

@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "role", description = "The role API")
-public interface RoleControllerI {
+public interface RoleController {
 
+
+    //TODO изменть на роль ДТО
     @Operation(summary = "Create new role")
     @PostMapping
     RoleEntity createRole(@RequestBody RoleEntity roleEntity);

@@ -3,16 +3,11 @@ package com.example.restaurants_reviews;
 import com.example.restaurants_reviews.dto.in.RestaurantInDTO;
 import com.example.restaurants_reviews.dto.in.ReviewInDTO;
 import com.example.restaurants_reviews.entity.KitchenTypeE;
-import com.example.restaurants_reviews.feign_clients.UserServiceClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInstance;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,7 +29,7 @@ public class AppContextTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void beforeAddRestaurant() throws Exception {
+    void beforeAddObjects() throws Exception {
         RestaurantInDTO restaurant = RestaurantInDTO.builder()
                 .description("test")
                 .phoneNumber("+79996665522")
@@ -63,7 +58,7 @@ public class AppContextTest {
                 .andExpect(status().isOk());
 
         ReviewInDTO reviewInDTO = ReviewInDTO.builder()
-                .restaurant_id(1L)
+                .restaurantId(1L)
                 .review("test")
                 .rating(4)
                 .build();
@@ -72,9 +67,4 @@ public class AppContextTest {
                         .contentType(MediaType.APPLICATION_JSON).content(obj3))
                 .andExpect(status().isOk());
     }
-
-//    @Bean
-//    public UserServiceClient userServiceClientMock() {
-//        return Mockito.mock(UserServiceClient.class);
-//    }
 }

@@ -1,7 +1,10 @@
 package com.example.user_service.DTO.in;
 
+import com.example.user_service.constraint.ValidPhoneNumber;
 import lombok.*;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -27,4 +30,7 @@ public class UserInDTO {
 
     @NotBlank(message = "Password cannot be null")
     private String password;
+
+    @ValidPhoneNumber(message = "Invalid format of phone number")
+    private String phoneNumber;
 }

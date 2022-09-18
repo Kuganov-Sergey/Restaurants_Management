@@ -48,9 +48,7 @@ public class RestaurantControllerImplTest extends AppContextTest {
         this.mockMvc.perform(get("/restaurant/smallList"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.id").value(1L))
-                .andExpect(jsonPath("$.content.name").value("test"))
-                .andExpect(jsonPath("$.content.avg").value(4));
+                .andExpect(jsonPath("$.content").hasJsonPath());
     }
 
     @Test

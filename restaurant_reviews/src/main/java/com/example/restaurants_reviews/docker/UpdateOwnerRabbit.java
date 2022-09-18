@@ -12,12 +12,11 @@ import org.springframework.stereotype.Component;
 
 @EnableRabbit
 @Component
-public class DeleteOwnerRabbit {
+public class UpdateOwnerRabbit {
 
-    //TODO изменить имя класа
     private final RestaurantService restaurantService;
 
-    public DeleteOwnerRabbit(RestaurantService restaurantService) {
+    public UpdateOwnerRabbit(RestaurantService restaurantService) {
         this.restaurantService = restaurantService;
     }
 
