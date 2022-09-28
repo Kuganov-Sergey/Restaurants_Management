@@ -1,5 +1,6 @@
 package com.example.user_service.controller;
 
+import com.example.user_service.DTO.in.RoleInDTO;
 import com.example.user_service.entity.RoleEntity;
 import com.example.user_service.exception.RoleNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,11 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "role", description = "The role API")
 public interface RoleController {
 
-
-    //TODO изменть на роль ДТО
     @Operation(summary = "Create new role")
     @PostMapping
-    RoleEntity createRole(@RequestBody RoleEntity roleEntity);
+    RoleEntity createRole(@RequestBody RoleInDTO roleInDTO);
 
     @Operation(summary = "Delete role by id")
     @DeleteMapping("/{id}")

@@ -1,2 +1,2 @@
 rootProject.name = 'Restaurants_Management'
-include('user_service', 'restaurant_reviews')
+include(':user_service', ':restaurant_reviews')

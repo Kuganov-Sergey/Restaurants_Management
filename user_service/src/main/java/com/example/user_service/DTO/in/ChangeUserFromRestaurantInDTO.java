@@ -1,7 +1,12 @@
 package com.example.user_service.DTO.in;
 
-import lombok.Data;
+import lombok.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
 public class ChangeUserFromRestaurantInDTO {
 

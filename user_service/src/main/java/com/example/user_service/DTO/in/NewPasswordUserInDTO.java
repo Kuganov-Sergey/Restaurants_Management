@@ -1,14 +1,19 @@
 package com.example.user_service.DTO.in;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Schema(description = "DTO to update password to User Entity by email address")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
+@Builder
 public class NewPasswordUserInDTO {
 
     @Schema(description = "User Email")

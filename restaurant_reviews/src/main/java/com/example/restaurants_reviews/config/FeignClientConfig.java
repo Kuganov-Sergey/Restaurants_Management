@@ -23,7 +23,6 @@ public class FeignClientConfig {
         HttpMessageConverters httpMessageConverters = new HttpMessageConverters(jacksonConverter);
         ObjectFactory<HttpMessageConverters> objectFactory = () -> httpMessageConverters;
 
-
         return new ResponseEntityDecoder(new SpringDecoder(objectFactory));
     }
 

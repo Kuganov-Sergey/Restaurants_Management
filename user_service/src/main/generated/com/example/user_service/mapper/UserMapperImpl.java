@@ -1,5 +1,6 @@
 package com.example.user_service.mapper;
 
+import com.example.user_service.DTO.in.RoleInDTO;
 import com.example.user_service.DTO.in.UserInDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.entity.RoleEntity;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-09-18T19:19:58+0300",
+    date = "2022-09-19T20:34:43+0300",
     comments = "version: 1.5.2.Final, compiler: javac, environment: Java 18 (Oracle Corporation)"
 )
 @Component
@@ -74,6 +75,19 @@ public class UserMapperImpl implements UserMapper {
         userEntity.setPhoneNumber( userInDTO.getPhoneNumber() );
 
         return userEntity;
+    }
+
+    @Override
+    public RoleEntity roleInDTOToRoleEntity(RoleInDTO roleInDTO) {
+        if ( roleInDTO == null ) {
+            return null;
+        }
+
+        RoleEntity roleEntity = new RoleEntity();
+
+        roleEntity.setRole( roleInDTO.getRole() );
+
+        return roleEntity;
     }
 
     private XMLGregorianCalendar localDateTimeToXmlGregorianCalendar( LocalDateTime localDateTime ) {

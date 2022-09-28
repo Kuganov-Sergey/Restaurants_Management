@@ -1,8 +1,10 @@
 package com.example.user_service.mapper;
 
+import com.example.user_service.DTO.in.RoleInDTO;
 import com.example.user_service.DTO.in.UserInDTO;
 import com.example.user_service.DTO.in.AddRoleToUserInDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
+import com.example.user_service.entity.RoleEntity;
 import com.example.user_service.entity.UserEntity;
 import com.example.user_service.entity.UserRolesEntity;
 import org.mapstruct.Mapper;
@@ -17,4 +19,7 @@ public interface UserMapper {
     @Mapping(target = "registrationDate", ignore = true)
     @Mapping(target = "id", ignore = true)
     UserEntity UserInDTOToUserEntity(UserInDTO userInDTO);
+
+    @Mapping(target = "id", ignore = true)
+    RoleEntity roleInDTOToRoleEntity(RoleInDTO roleInDTO);
 }

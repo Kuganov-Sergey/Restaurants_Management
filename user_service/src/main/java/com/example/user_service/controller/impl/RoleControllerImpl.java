@@ -1,5 +1,6 @@
 package com.example.user_service.controller.impl;
 
+import com.example.user_service.DTO.in.RoleInDTO;
 import com.example.user_service.controller.RoleController;
 import com.example.user_service.entity.RoleEntity;
 import com.example.user_service.exception.RoleNotFoundException;
@@ -18,8 +19,8 @@ public class RoleControllerImpl implements RoleController {
     }
 
     @Override
-    public RoleEntity createRole(RoleEntity roleEntity) {
-        return roleService.createRole(roleEntity);
+    public RoleEntity createRole(RoleInDTO roleInDTO) {
+        return roleService.createRole(roleInDTO);
     }
 
     @Override

@@ -68,6 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Long deleteUser(Long id) throws UserNotFoundException {
         Optional<UserEntity> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
@@ -103,6 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void addRoleToUser(AddRoleToUserInDTO addRoleToUserInDTO) throws RoleNotFoundException,
             UserNotFoundException {
         Optional<RoleEntity> role = roleRepository.findById(addRoleToUserInDTO.getRoleId());
@@ -119,13 +121,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteRoleFromUserByUserRolesId(Long id) {
-        roleRepository.deleteById(id);
+        userRolesRepository.deleteById(id);
     }
 
     @Override
-    public Long changeUserFromRestaurant(ChangeUserFromRestaurantInDTO changeUserFromRestaurantInDTO) throws UserNotFoundException {
-        Optional<UserEntity> user = userRepository.findById(changeUserFromRestaurantInDTO.getOldUserId());
+    public Long changeUserFromRestaurant(ChangeUserFromRestaurantInDTO changeUserFromRestaurantInDTO)
+            throws UserNotFoundException {
+        Optional<UserEntity> user = userRepository.findById(changeUserFromRestaurantInDTO.getNewUserId());
         if (user.isEmpty()) {
             throw new UserNotFoundException();
         }

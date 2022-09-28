@@ -1,6 +1,8 @@
 package com.example.user_service.controller;
 
 import com.example.user_service.DTO.in.AddRoleToUserInDTO;
+import com.example.user_service.DTO.in.ChangeUserFromRestaurantInDTO;
+import com.example.user_service.DTO.in.NewPasswordUserInDTO;
 import com.example.user_service.DTO.in.UpdateUserInDTO;
 import com.example.user_service.UserServiceApplicationTests;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -72,24 +74,52 @@ class UserControllerTest extends UserServiceApplicationTests {
     @Test
     void addRoleToUser() throws Exception {
         AddRoleToUserInDTO addRoleToUserInDTO = AddRoleToUserInDTO.builder()
-                .roleId(1L)
+                .roleId(2L)
                 .userId(1L)
                 .build();
         objectMapper.registerModule(new JavaTimeModule());
         String obj = objectMapper.writeValueAsString(addRoleToUserInDTO);
-        this.mockMvc.perform(put("/user/role").contentType(MediaType.APPLICATION_JSON).content(obj));
-        //TODO доделать перед после добавиления роли
+        this.mockMvc.perform(put("/user/role")
+                        .contentType(MediaType.APPLICATION_JSON).content(obj)).andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(get("/user/{id}", 1L))
+                .andDo(print())
+                .andExpect(jsonPath("$.roles[1].id").value(2))
+                .andExpect(jsonPath("$.roles[1].role").value("ROLE_ADMIN"));
     }
-//
+
+    @Test
+    void changePasswordByUserEmailAndOldPassword() throws Exception {
+        NewPasswordUserInDTO newPasswordUserInDTO = NewPasswordUserInDTO.builder()
+                .email("test1@mail.ru")
+                .oldPassword("12345@Test")
+                .newPassword("123456@Test")
+                .build();
+        String obj = objectMapper.writeValueAsString(newPasswordUserInDTO);
+        this.mockMvc.perform(put("/user/password")
+                        .contentType(MediaType.APPLICATION_JSON).content(obj))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
 //    @Test
-//    void changePasswordByUserEmailAndOldPassword() {
+//    void deleteRoleFromUserByUserRolesId() throws Exception {
+//        this.mockMvc.perform(delete("/user/{id}/role", 1L))
+//                .andDo(print())
+//                .andExpect(status().isOk());
 //    }
-//
-//    @Test
-//    void deleteRoleFromUserByUserRolesId() {
-//    }
-//
-//    @Test
-//    void changeUserFromRestaurant() {
-//    }
+    //TODO не смог реализовать метод удаления роли по id user_roles
+
+    @Test
+    void changeUserFromRestaurant() throws Exception {
+        ChangeUserFromRestaurantInDTO changeUserFromRestaurantInDTO = ChangeUserFromRestaurantInDTO.builder()
+                .oldUserId(1L)
+                .newUserId(3L)
+                .build();
+        String obj = objectMapper.writeValueAsString(changeUserFromRestaurantInDTO);
+        this.mockMvc.perform(put("/user/changeUser")
+                .contentType(MediaType.APPLICATION_JSON).content(obj))
+                .andExpect(status().is4xxClientError());
+    }
 }
