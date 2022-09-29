@@ -7,6 +7,7 @@ import com.example.user_service.DTO.in.*;
 import com.example.user_service.DTO.out.DeleteOwnerInRestaurantOutDTO;
 import com.example.user_service.DTO.out.UserOutDTO;
 import com.example.user_service.entity.RoleEntity;
+import com.example.user_service.entity.Status;
 import com.example.user_service.entity.UserEntity;
 import com.example.user_service.entity.UserRolesEntity;
 import com.example.user_service.exception.PasswordsDontMatchException;
@@ -18,6 +19,8 @@ import com.example.user_service.service.UserService;
 import org.springframework.amqp.rabbit.core.RabbitMessageOperations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,13 +36,15 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final RabbitMessageOperations rabbitTemplate;
 
-    public UserServiceImpl(UserRepository userRepository, UserRolesRepository userRolesRepository, UserMapper userMapper,
-                           RoleRepository roleRepository, RabbitMessageOperations rabbitTemplate) {
+    public UserServiceImpl(UserRepository userRepository, UserRolesRepository userRolesRepository,
+                           UserMapper userMapper, RoleRepository roleRepository,
+                           RabbitMessageOperations rabbitTemplate) {
         this.userRepository = userRepository;
         this.userRolesRepository = userRolesRepository;
         this.userMapper = userMapper;
         this.roleRepository = roleRepository;
         this.rabbitTemplate = rabbitTemplate;
+        ;
     }
 
     @Override
@@ -47,6 +52,9 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(userInDTO.getEmail())) {
             throw new UserEmailIsAlreadyExist();
         }
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+        userInDTO.setStatus(Status.ACTIVE);
+        userInDTO.setPassword(passwordEncoder.encode(userInDTO.getPassword()));
         return userMapper
                 .userEntityToUserOutDTO(userRepository.save(userMapper
                         .UserInDTOToUserEntity(userInDTO)));
@@ -135,5 +143,10 @@ public class UserServiceImpl implements UserService {
         }
         rabbitTemplate.convertAndSend("queueForUpdateOwner", changeUserFromRestaurantInDTO);
         return changeUserFromRestaurantInDTO.getNewUserId();
+    }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        return userRepository.findByName(username);
     }
 }

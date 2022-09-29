@@ -1,15 +1,13 @@
 package com.example.user_service.DTO.out;
 
 import com.example.user_service.entity.RoleEntity;
+import com.example.user_service.entity.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.*;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -52,4 +50,8 @@ public class UserOutDTO {
             inverseJoinColumns = { @JoinColumn(name = "role_id") }
     )
     private Collection<RoleEntity> roles;
+
+    @Schema(description = "User status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }

@@ -55,6 +55,10 @@ public class UserEntity {
     )
     private Collection<RoleEntity> roles;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, columnDefinition = "varchar(10) default ACTIVE")
+    private Status status;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,10 +1,11 @@
 package com.example.user_service.DTO.in;
 
 import com.example.user_service.constraint.ValidPhoneNumber;
+import com.example.user_service.entity.Status;
 import lombok.*;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
@@ -33,4 +34,7 @@ public class UserInDTO {
 
     @ValidPhoneNumber(message = "Invalid format of phone number")
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 }
