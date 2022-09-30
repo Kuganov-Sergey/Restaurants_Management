@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
         this.userMapper = userMapper;
         this.roleRepository = roleRepository;
         this.rabbitTemplate = rabbitTemplate;
-        ;
     }
 
     @Override
@@ -82,7 +81,8 @@ public class UserServiceImpl implements UserService {
         if (optionalUser.isEmpty()) {
             throw new UserNotFoundException();
         }
-        rabbitTemplate.convertAndSend("queueForDeleteOwner", new DeleteOwnerInRestaurantOutDTO(id));
+        rabbitTemplate.convertAndSend("queueForDeleteOwner"
+                , new DeleteOwnerInRestaurantOutDTO(id));
         userRepository.deleteById(id);
         return id;
     }

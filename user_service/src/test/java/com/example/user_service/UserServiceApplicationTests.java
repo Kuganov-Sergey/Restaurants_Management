@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,6 +23,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         UserServiceApplication.class})
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+/**
+ *                   ||
+ * Disable security \|/         */
+@AutoConfigureMockMvc(addFilters = false)
 public class UserServiceApplicationTests {
 
     @Autowired
@@ -87,4 +92,5 @@ public class UserServiceApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON).content(obj)).andDo(print())
                 .andExpect(status().isOk());
     }
+
 }

@@ -3,7 +3,6 @@ package com.example.user_service.security.security_entity;
 import com.example.user_service.entity.RoleEntity;
 import com.example.user_service.entity.Status;
 import com.example.user_service.entity.UserEntity;
-import org.apache.catalina.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

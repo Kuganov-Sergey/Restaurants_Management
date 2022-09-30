@@ -52,7 +52,8 @@ public interface UserController {
 
     @Operation(summary = "Add role to user")
     @PutMapping("/role")
-    void addRoleToUser(@RequestBody AddRoleToUserInDTO addRoleToUserInDTO) throws UserNotFoundException, RoleNotFoundException;
+    void addRoleToUser(@RequestBody AddRoleToUserInDTO addRoleToUserInDTO) throws UserNotFoundException,
+            RoleNotFoundException;
 
     @Operation(summary = "Create new password for user by email and old password")
     @PutMapping("/password")

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +16,8 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE my_user SET status = 'DELETED' WHERE id=?")
+@Where(clause = "status='ACTIVE'")
 @Table(name = "my_user")
 public class UserEntity {
 
